@@ -6,8 +6,14 @@ Pandazord first approach. A multimarket trading bot.
 
 Um robô que realiza trades e tem a intenção de ser agnóstico quanto ao mercado em que está negociando.
 
+## Tecnologias
+
+A lingagem de programação predominante no robô é p Python. 
+
+A intenção é conceber uma arquitetura baseada em *microsserviços*, isolados em *containers Docker*.
+
 ## Etapas
 
 ### Primeira etapa: Prova de conceito
 
-O objetivo desta etapa é deixar o bot suficientemente funcional (estável, seguro, etc) para que possa realizar trades em múltiplos mercados de criptomoedas na Binance *exchange*
+O objetivo desta etapa é deixar o bot suficientemente funcional (estável, seguro, etc) para que possa realizar trades em múltiplos mercados de criptomoedas na *exchange* [Binance](https://www.binance.com "Binance's Homepage") 
