@@ -27,7 +27,7 @@ Cryptocurrency Exchange"), utilizando uma "estratégia de calibração" simples 
 ### Arquitetura
 
 - Divisão do subgrupo em repositórios distintos para cada *microsserviço*;
-- Adoção do [OpenFaas](https://www.openfaas.com "Serverless Functions, Made Simple") como padrão arquitetural;
+- Adoção do *[OpenFaas](https://www.openfaas.com "Serverless Functions, Made Simple")* como padrão arquitetural;
 - Deploy em *cluster [kubernetes](https://kubernetes.io/ "Production-Grade Container Orchestration")*.
 
 ### Expansão para B3
