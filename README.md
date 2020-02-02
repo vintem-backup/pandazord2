@@ -1,6 +1,6 @@
 # Pandazord Draft
 
-[Pandazord](pandazord.trade "Pandzord's official homepage") first approach. A multimarket trading bot.
+[Pandazord](https://www.pandazord.trade "Pandzord's official homepage") first approach. A multimarket trading bot.
 
 ## O que é
 
