@@ -16,7 +16,8 @@ A intenção é conceber uma arquitetura baseada em *microsserviços*, isolados 
 
 ### Prova de conceito
 
-- Deixar o bot suficientemente funcional (estável, seguro, etc) para que possa realizar trades em múltiplos mercados de criptomoedas na *exchange* [Binance](https://www.binance.com "Binance's Homepage"), utilizando uma "estratégia de calibração" simples (cruzamento de médias móveis com *"stop trending"*).
+- Deixar o bot suficientemente funcional (estável, seguro, etc) para que possa realizar trades em múltiplos mercados de criptomoedas na *exchange* [Binance](https://www.binance.com "The World's Leading
+Cryptocurrency Exchange"), utilizando uma "estratégia de calibração" simples (cruzamento de médias móveis com *"stop trending"*).
 
 ### Novas estratégias
 
