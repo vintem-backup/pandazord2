@@ -16,4 +16,8 @@ A intenção é conceber uma arquitetura baseada em *microsserviços*, isolados 
 
 ### Primeira etapa: Prova de conceito
 
-O objetivo desta etapa é deixar o bot suficientemente funcional (estável, seguro, etc) para que possa realizar trades em múltiplos mercados de criptomoedas na *exchange* [Binance](https://www.binance.com "Binance's Homepage") 
+- Deixar o bot suficientemente funcional (estável, seguro, etc) para que possa realizar trades em múltiplos mercados de criptomoedas na *exchange* [Binance](https://www.binance.com "Binance's Homepage").
+
+### Etapa 2
+
+Divisão do repositório
