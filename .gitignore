@@ -3,6 +3,7 @@ BKP*
 TODO.md
 *.ipynb
 Pipfile.lock
+**/migrations/*
 
 # Vscode stuff:
 .vscode/*
