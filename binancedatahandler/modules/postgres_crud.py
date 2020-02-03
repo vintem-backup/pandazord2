@@ -6,17 +6,26 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
 
     def __init__(self, DB_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD):
         #super().__init__() #TODO: Pesquisar pra que serve isto
+        self.DB_HOST = DB_HOST
+        self.POSTGRES_DB = POSTGRES_DB
+        self.POSTGRES_USER = POSTGRES_USER
+        self.POSTGRES_PASSWORD = POSTGRES_PASSWORD
+    
+    def create_connection (self):
 
         try:
-            self.connection = psycopg2.connect(host = DB_HOST, database = POSTGRES_DB, 
-            user = POSTGRES_USER, password = POSTGRES_PASSWORD)
+            connection = psycopg2.connect(host = self.DB_HOST, database = self.POSTGRES_DB, 
+            user = self.POSTGRES_USER, password = self.POSTGRES_PASSWORD)
 
-            self.pointer = connection.cursor(cursor_factory = psycopg2.extras.DictCursor)
+            pointer = connection.cursor(cursor_factory = psycopg2.extras.DictCursor)
+
+            return connection, pointer
 
         except (Exception, psycopg2.Error) as error: #TODO: TRATAR EXCEÇÃO AQUI
 
+            pass
 
-    def sql_command(table_name, keys_dict, action, **kwargs):
+    def sql_command(self, table_name, keys_dict, action, **kwargs):
         
         """Dado um nome de tabela <table_name> e o dicionário <keys_dict> (em que a chave será o nome da coluna e 
         o valor definirá o tipo de dado gravado - vide documentação do PostgreSQL), retorna o comando SQL ade-
@@ -103,9 +112,11 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
         
         pk = kwargs.get('pk')
         
-        create_table_job_status = 'fail'
+        table_was_created = False
         
         try:
+
+            connection, pointer = self.create_connection()
 
             sql_create_query = self.sql_command(table_name, keys_dict, 'create')
                     
@@ -113,24 +124,23 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
                 
                 sql_create_query = self.sql_command(table_name, keys_dict, 'create', pk=pk)
             
-            self.pointer.execute(sql_create_query)
+            pointer.execute(sql_create_query)
             
-            self.connection.commit()
+            connection.commit()
             
-            create_table_job_status = 'done'
+            table_was_created = True
 
         except (Exception, psycopg2.Error) as error: #TODO: TRATAR EXCEÇÃO AQUI
 
-            self.pointer.execute("ROLLBACK")
+            pointer.execute("ROLLBACK")
         
-        #TODO: O fato de pointer e connections serem criados no init da classe, quando instanciada, não implica que os fechando não poderiam ser usados em outro ponto da classe?
-        self.pointer.close()
-        self.connection.close()
+        pointer.close()
+        connection.close()
         
-        return create_table_job_status
+        return table_was_created
 
 
-    def read_table(table_name, **kwargs):
+    def read_table(self, table_name, **kwargs):
         
         """Busca no banco a tabela [table_name], retornando uma lista, tal que cada elemento representa
         uma linha (registro) da tabela, ou uma lista vazia, caso a tabela não seja encontrada. Pode retornar
@@ -164,31 +174,31 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
         
         limit = kwargs.get('limit')
 
-        records = []
-
         try:
             
+            connection, pointer = self.create_connection()
+
             sql_select_query = 'SELECT * FROM ' + table_name
             
             if (field_key and sort_type and limit):
                 
                 sql_select_query = sql_select_query + ' ORDER BY ' + field_key + ' ' + sort_type + ' LIMIT ' + limit
 
-            self.pointer.execute(sql_select_query)
+            pointer.execute(sql_select_query)
 
-            self.records = pointer.fetchall()
+            records = pointer.fetchall()
+
+            return records
 
         except (Exception, psycopg2.Error) as error: #TODO: TRATAR EXCEÇÃO AQUI
 
-            self.pointer.execute("ROLLBACK")
+            pointer.execute("ROLLBACK")
                 
-        self.pointer.close()
-        self.connection.close()
-        
-        return records
+        pointer.close()
+        connection.close()
 
 
-    def update_table(table_name, pk_field, pk_value, field_to_update, new_field_value):
+    def update_table(self, table_name, pk_field, pk_value, field_to_update, new_field_value):
     
         """Dada uma certa tabela, atualiza uma entrada específica da mesma.
         
@@ -203,29 +213,30 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
         new_field_value -- Novo valor a ser gravado no campo
         """
 
-        update_table_job_satus = 'fail'
+        table_was_updated = False
 
         try:
 
-            sql_update_query = 'Update ' + table_name + ' set ' + field_to_update + ' = %s where ' + pk_field + '= %s'
-            
-            pointer.execute(sql_update_query, (new_field_value, pk_value))
+            connection, pointer = self.create_connection()
+
+            sql_update_query = 'Update ' + table
+            print (error)ew_field_value, pk_value))
 
             connection.commit()
 
-            update_table_job_satus = 'done'
+            table_was_updated = True
 
         except (Exception, psycopg2.Error) as error: #TODO: TRATAR EXCEÇÃO AQUI
 
-            self.pointer.execute("ROLLBACK")
+            pointer.execute("ROLLBACK")
 
-        self.pointer.close()
-        self.connection.close()
+        pointer.close()
+        connection.close()
 
-        return update_table_job_satus
+        return table_was_updated
 
 
-    def save_in_table(table_name, keys_dict, data):
+    def save_in_table(self, table_name, keys_dict, data):
         
         """Salva na tabela <table_name>, nas respectivas colunas <keys_dict.keys() [i]>, os dados correspondentes, <data>.
         
@@ -238,22 +249,24 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
         data_list   -- Lista de dados a serem gravados
         """
 
-        save_in_table_job_satus = 'fail'
+        data_was_saved_in_table = False
 
         try:
+
+            connection, pointer = self.create_connection()
             
             sql_save_query = self.sql_command(table_name, keys_dict, 'save')
             
             for i in range(len(data)):
                 
-                self.pointer.execute(sql_save_query, data[i])
+                pointer.execute(sql_save_query, data[i])
             
-            self.connection.commit()
+            connection.commit()
             
-            save_in_table_job_satus = 'done'
+            data_was_saved_in_table = True
 
         except (Exception, psycopg2.Error) as error: #TODO: TRATAR EXCEÇÃO AQUI
 
-            self.pointer.execute("ROLLBACK")
+            pointer.execute("ROLLBACK")
 
-        return save_in_table_job_satus
+        return data_was_saved_in_table
