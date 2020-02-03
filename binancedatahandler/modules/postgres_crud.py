@@ -1,4 +1,3 @@
-# Just a random change to commit
 import psycopg2
 import psycopg2.extras
 
