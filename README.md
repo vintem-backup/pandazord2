@@ -8,7 +8,7 @@ Um robô que realiza trades e tem a intenção de ser agnóstico quanto ao merca
 
 ## Tecnologias
 
-A lingagem de programação predominante no robô é o Python. 
+A lingagem de programação predominante no robô é o Python.
 
 A intenção é conceber uma arquitetura baseada em *microsserviços*, isolados em *containers Docker*.
 
