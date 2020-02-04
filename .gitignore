@@ -4,6 +4,7 @@ TODO.md
 *.ipynb
 Pipfile.lock
 **/migrations/*
+*/jupyterlog
 
 # Vscode stuff:
 .vscode/*
