@@ -16,24 +16,24 @@ Apaga dados de tabelas ou tabelas, renomeia tabelas. Vide a seção "copiar depo
   
 Criado o teste para conferir se a tabela é criada. O teste verificou positivo, porém é preciso testar os cenários de exceção como:
 
-    - Tentar criar uma tabela já exixtente
-    - Etc
+- Tentar criar uma tabela já exixtente
+- Etc
 
 ### Salvar dados em tabelas
 
 Teste de salvamento verificou positivo, porém é preciso testar os cenários de exceção como:
 
-    - Tenta salvar em tabela inexistente
-    - Tenta salvar pk conflitante
-    - Tenta gravar dados que não condizem com as colunas
-    - etc
+- Tenta salvar em tabela inexistente
+- Tenta salvar pk conflitante
+- Tenta gravar dados que não condizem com as colunas
+- etc
 
 ### Ler dados de uma tabela
   
 Teste de leitura verificou positivo, porém é preciso testar os cenários de exceção como:
 
-    - Tenta ler de uma tabela inexistente
-    - Etc
+- Tenta ler de uma tabela inexistente
+- Etc
 
 ### Ainda falta testar
 
