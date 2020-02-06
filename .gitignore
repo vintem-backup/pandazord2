@@ -1,7 +1,6 @@
 #Dev stuff:
 BKP*
 TODO.md
-*.ipynb
 Pipfile.lock
 **/migrations/*
 */jupyterlog
