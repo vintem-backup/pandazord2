@@ -1,14 +1,16 @@
-#binance_handler.py
+#TODO: Docstrings and type annotations
 
-import requests
 import requests
 import json
 import time
 from datetime import datetime
 from copy import deepcopy
-#import delta_time_in_seconds_between_utc_and
 
-def server_time():
+import sys
+sys.path.append('..')
+from modules.useful_functions import *
+
+def binance_server_time():
 
     binance_time = datetime.fromtimestamp(int((requests.get('https://api.binance.com/api/v1/time').\
                                                json()['serverTime'])/1000))
@@ -49,7 +51,7 @@ class GetKlines:
 ''' + self.asset_symbol + '''&interval=''' + self.candle_interval +\
 '''&startTime=''' + self.start_time
 
-        for i in range(max_attempts):
+        for i in range(self.max_attempts):
 
             try:
 
@@ -66,34 +68,25 @@ class GetKlines:
                 if (int(response.status_code) == 200): raw_klines = response.json(); break
             
         return raw_klines
-    
-    def is_there_missing_data_in(klines_in):
-        pass
-    
-    
-    def _format(self, klines_in):
-        
-        def completing_missing_data_on_1_minute_candle():
-            pass
 
-        def clear_and_adjust_time_prices_and_volume_of(klines_in):
+
+    def _format(self, klines_in):
+
+        def clear_columns_and_adjust_time_and_prices_and_volume_on(klines_in):
 
             klines_out = []
 
-            delta = delta_time_in_seconds_between_utc_and(server_time())
+            delta = delta_time_in_exact_seconds_from_hours_between_utc_and(binance_server_time())
             
             for i in range (len(klines_in)):
 
-                open_time = datetime.fromtimestamp(int(klines_in[i][0]/1000) + delta)
-                
-                volume =  (float(klines_in[i][5]))
-
-                data = [open_time,
+                data = [datetime.fromtimestamp(int(klines_in[i][0]/1000) + delta), #open_time
                         float(klines_in[i][1]), #Open
                         float(klines_in[i][2]), #High
                         float(klines_in[i][3]), #Low
                         float(klines_in[i][4]), #Close
-                        volume]
+                        float(klines_in[i][5]) #volume
+                        ]
 
                 klines_out.append(data)
 
@@ -115,8 +108,8 @@ class GetKlines:
 
             return klines_out
         
-        klines = clear_and_adjust_time_prices_and_volume_of(klines_in)
+        klines_adjusted = clear_columns_and_adjust_time_and_prices_and_volume_on(klines_in)
         
-        klines = making_seconds_be_zero_on(klines)
+        klines = making_seconds_be_zero_on(klines_adjusted)
         
         return klines
