@@ -2,9 +2,11 @@
 BKP*
 TODO.md
 Pipfile.lock
-*.ipynb
+
 **/migrations/*
 */jupyterlog
+dockerlog
+djangolog
 
 # Vscode stuff:
 .vscode/*
