@@ -178,6 +178,8 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
         
         limit = kwargs.get('limit')
 
+        records = []
+
         try:
             
             connection, pointer = self.create_connection()
@@ -192,14 +194,18 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
 
             records = pointer.fetchall()
 
-            return records
+            status = 'Records found'
 
         except (Exception, psycopg2.Error) as error: #TODO: TRATAR EXCEÇÃO AQUI
+
+            status = 'Records not found because {}'.format(error)
 
             pointer.execute("ROLLBACK")
                 
         pointer.close()
         connection.close()
+
+        return records, status
 
 
     def update_record(self, table_name, pk_field, pk_value, field_to_update, new_field_value):
