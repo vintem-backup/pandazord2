@@ -138,13 +138,12 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
 
             pointer.execute("ROLLBACK")
         
-        pointer.close()
-        connection.close()
+        pointer.close(); connection.close()
         
         return table_was_created
 
 
-    def read_records_from_table(self, table_name, **kwargs):
+    def read_entries_from_table(self, table_name, **kwargs):
         
         """Busca no banco a tabela [table_name], retornando uma lista, tal que cada elemento representa
         uma linha (registro) da tabela, ou uma lista vazia, caso a tabela não seja encontrada. Pode retornar
@@ -176,9 +175,9 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
         
         sort_type = kwargs.get('sort_type')
         
-        limit = kwargs.get('limit')
+        limit = str(kwargs.get('limit'))
 
-        records = []
+        entrys = []
 
         try:
             
@@ -192,23 +191,19 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
 
             pointer.execute(sql_select_query)
 
-            records = pointer.fetchall()
+            entrys = pointer.fetchall()
 
-            status = 'Records found'
-
-        except (Exception, psycopg2.Error) as error: #TODO: TRATAR EXCEÇÃO AQUI
-
-            status = 'Records not found because {}'.format(error)
+        except (Exception, psycopg2.Error) as error: #TODO: TRATAR EXCEÇÃO AQUI (fazendo as entradas como 
+                                                            #cunjunto vazio, já não seria uma forma de tratar a exceção?)
 
             pointer.execute("ROLLBACK")
                 
-        pointer.close()
-        connection.close()
+        pointer.close(); connection.close()
 
-        return records, status
+        return entrys
 
 
-    def update_record(self, table_name, pk_field, pk_value, field_to_update, new_field_value):
+    def update_entry(self, table_name, pk_field, pk_value, field_to_update, new_field_value):
     
         """Dada uma certa tabela, atualiza uma entrada específica da mesma.
         
@@ -223,7 +218,7 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
         new_field_value -- Novo valor a ser gravado no campo
         """
 
-        table_was_updated = False
+        was_entry_updated = False
 
         try:
 
@@ -236,16 +231,15 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
 
             connection.commit()
 
-            table_was_updated = True
+            was_entry_updated = True
 
         except (Exception, psycopg2.Error) as error: #TODO: TRATAR EXCEÇÃO AQUI
 
             pointer.execute("ROLLBACK")
 
-        pointer.close()
-        connection.close()
+        pointer.close(); connection.close()
 
-        return table_was_updated
+        return was_entry_updated
 
 
     def save_data_in_table(self, table_name, keys_dict, data):
@@ -281,13 +275,12 @@ class PostgresCrud: #TODO: Adicionar Type Annotations
 
             pointer.execute("ROLLBACK")
         
-        pointer.close()
-        connection.close()
+        pointer.close(); connection.close()
 
         return data_was_saved_in_table
 
         
-        def delete(self):
+        def delete_entries_on_table(self):
             pass
 
         
