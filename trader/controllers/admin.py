@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BinanceAssets
+from .models import BinanceAsset
 
 # Register your models here.
-admin.site.register(BinanceAssets)
+admin.site.register(BinanceAsset)
