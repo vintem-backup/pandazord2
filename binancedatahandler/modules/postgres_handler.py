@@ -177,7 +177,7 @@ class PostgresHandler: #TODO: Adicionar Type Annotations
         
         limit = str(kwargs.get('limit'))
 
-        entrys = []
+        entries = []
 
         try:
             
@@ -191,7 +191,7 @@ class PostgresHandler: #TODO: Adicionar Type Annotations
 
             pointer.execute(sql_select_query)
 
-            entrys = pointer.fetchall()
+            entries = pointer.fetchall()
 
         except (Exception, psycopg2.Error) as error: #TODO: TRATAR EXCEÇÃO AQUI (fazendo as entradas como 
                                                             #cunjunto vazio, já não seria uma forma de tratar a exceção?)
@@ -200,7 +200,7 @@ class PostgresHandler: #TODO: Adicionar Type Annotations
                 
         pointer.close(); connection.close()
 
-        return entrys
+        return entries
 
 
     def update_entry(self, table_name, pk_field, pk_value, field_to_update, new_field_value):
