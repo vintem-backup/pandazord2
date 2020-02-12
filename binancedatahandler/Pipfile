@@ -8,8 +8,9 @@ ipykernel = "*"
 jupyter = "*"
 
 [packages]
-psycopg2 = "*"
+psycopg2-binary = "*"
 requests = "*"
+psutil = "*"
 
 [requires]
 python_version = "3.8"
