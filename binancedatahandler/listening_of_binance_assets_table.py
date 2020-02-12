@@ -9,17 +9,17 @@ from datetime import datetime
 from modules.postgres_handler import PostgresHandler as PG
 from modules.useful_functions import *
 
+'''
 DB_HOST = 'localhost'
 POSTGRES_USER = 'pandazord'
 POSTGRES_DB = 'pandazord_database'
 POSTGRES_PASSWORD = '06Fj@%r7KTXm5+eWn2'
-
 '''
 DB_HOST = os.environ['DB_HOST']
 POSTGRES_USER = os.environ['POSTGRES_USER']
 POSTGRES_DB = os.environ['POSTGRES_DB']
 POSTGRES_PASSWORD = os.environ['POSTGRES_PASSWORD']
-'''
+
 candle_interval = '1m'
 
 pg = PG(DB_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD)
