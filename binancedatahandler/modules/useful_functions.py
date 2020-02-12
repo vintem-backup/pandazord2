@@ -4,6 +4,7 @@ from datetime import datetime
 import requests
 import os
 from copy import deepcopy
+import psutil
 
 oldest_open_time_in_milliseconds = 1241893500000
 #oldest_open_time_in_milliseconds = os.environ['oldest_open_time_in_milliseconds']
@@ -124,3 +125,26 @@ def replace_with_zero_where_data_is_missing(last_open_time, klines):
     last_open_time = int((klines_out[len(klines_out)-1][0]))
     
     return last_open_time, klines_out
+
+
+def running_this_subprocess(pid):
+    
+    if pid == None: return False
+    
+    elif isinstance(pid, int):
+        
+        if (psutil.pid_exists(pid)):
+            
+            process = psutil.Process(pid)
+            
+            if (process.status() == 'zombie'): 
+                
+                process.kill()
+                
+                return False
+            
+            else: return True
+        
+        else: return False
+        
+    else: raise TypeError('Not a valid type. Should be integer or None.')
