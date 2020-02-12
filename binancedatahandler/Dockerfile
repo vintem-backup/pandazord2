@@ -2,7 +2,7 @@ FROM python:3.8.1-alpine3.11
 ENV PYTHONUNBUFFERED 1
 RUN apk update && \
     apk add --virtual build-deps gcc python-dev musl-dev && \
-    apk add postgresql-dev
+    apk add postgresql-dev linux-headers
 RUN mkdir /code
 COPY Pipfile /code/
 WORKDIR /code
