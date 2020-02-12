@@ -8,6 +8,7 @@ Pipfile.lock
 dockerlog
 djangolog
 *.ipynb
+dev/*
 
 # Vscode stuff:
 .vscode/*
