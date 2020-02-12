@@ -1,5 +1,6 @@
 import requests
 from datetime import datetime
+import time
 
 class BinanceKlines:
     
@@ -24,15 +25,12 @@ class BinanceKlines:
 
             try:
 
-                response = requests.get(url)
-
-                response.raise_for_status()
+                response = requests.get(url); response.raise_for_status()
                 
                 if (int(response.status_code) == 200): raw_klines = response.json(); break
 
-            except (Exception, requests.exceptions.RequestException) as error: #TODO: TRATAR EXCEÇÃO AQUI
-                
-                time.sleep(5) 
+            except (Exception, requests.exceptions.RequestException, 
+            requests.exceptions.ConnectionError) as error: time.sleep(5) #TODO: TRATAR EXCEÇÃO AQUI
             
         return raw_klines
 
@@ -43,8 +41,24 @@ class BinanceKlines:
 
 def binance_server_time():
 
-    binance_time = datetime.fromtimestamp(int((requests.get('https://api.binance.com/api/v1/time').\
-                                               json()['serverTime'])/1000))
+    binance_time = datetime.now()
+
+    url = 'https://api.binance.com/api/v1/time'
+
+    for i in range(5):
+
+        try:
+
+            response = requests.get(url); response.raise_for_status()
+
+            if (int(response.status_code) == 200):
+
+                binance_time = datetime.fromtimestamp(int((response).json()['serverTime'])/1000)
+
+            break
+
+        except (Exception, requests.exceptions.RequestException, 
+        requests.exceptions.ConnectionError) as error: time.sleep(2) #TODO: TRATAR EXCEÇÃO AQUI
 
     return binance_time
 
@@ -64,8 +78,7 @@ def test_binance_request_limit():
             
             if not (requests_limit_reached): break
         
-        except (Exception, requests.exceptions.RequestException) as error: #TODO: TRATAR EXCEÇÃO AQUI
-            
-            time.sleep(2)
+        except (Exception, requests.exceptions.RequestException, 
+        requests.exceptions.ConnectionError) as error: time.sleep(2) #TODO: TRATAR EXCEÇÃO AQUI
 
     return requests_limit_reached
