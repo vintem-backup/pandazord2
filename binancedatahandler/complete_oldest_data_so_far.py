@@ -62,46 +62,52 @@ keys = {'open_time': 'timestamp', 'open': 'numeric', 'high': 'numeric', 'low': '
 
 max_attempts = 10 #TODO: Pode vir de um parâmetro depois
 
-was_entry_updated_to_building = pg.update_entry('binance_assets', 
-                                                'asset_symbol', asset_symbol, 'status', 'building')
+def main():
 
-if not (was_entry_updated_to_building): pass #TODO: Tratar exceção
+    was_entry_updated_to_building = pg.update_entry('binance_assets', 
+                                                    'asset_symbol', asset_symbol, 'status', 'building')
 
-last_open_time = return_last_open_time_from_db_or_create_table_if_doesnt_exist(table_name)
+    if not (was_entry_updated_to_building): pass #TODO: Tratar exceção
 
-while True:
+    last_open_time = return_last_open_time_from_db_or_create_table_if_doesnt_exist(table_name)
 
-    klines = []
-    
-    start_time = str(last_open_time + 30000)  #Um passo de 30s (30000 milissegundos)
+    while True:
+
+        klines = []
         
-    klines = BinanceKlines(asset_symbol, candle_interval, max_attempts).get_from(start_time)
-    
-    if (len(klines) > 0):
-        
-        if (len(klines) < 500): #Chegou na kline mais recente
+        start_time = str(last_open_time + 30000)  #Um passo de 30s (30000 milissegundos)
             
-            klines = klines[:(len(klines)-1)] #Apaga o último resgistro (candle não fechado)
-            
-            if (len(klines) == 0): break
-
-        last_open_time, treated_missing_data_klines = replace_with_zero_where_data_is_missing(
-            last_open_time, klines)
+        klines = BinanceKlines(asset_symbol, candle_interval, max_attempts).get_from(start_time)
         
-        delta = delta_time_in_seconds_rounded_from_integers_hours_between_utc_and(binance_server_time())
-        
-        formated_klines = format_klines(treated_missing_data_klines, delta)
-               
-        save_in_table_job_status = pg.save_data_in_table(table_name, keys, formated_klines)
-
-        if (len(klines) > 500): break #TODO: Isto é uma anomalia, deve ser tratada
+        if (len(klines) > 0):
             
-    else: pass #TODO: Tratar exceção (Falha de comunicação com a binance, klines nulas)
+            if (len(klines) < 500): #Chegou na kline mais recente
+                
+                klines = klines[:(len(klines)-1)] #Apaga o último resgistro (candle não fechado)
+                
+                if (len(klines) == 0): break
 
-    requests_limit_reached = test_binance_request_limit()
+            last_open_time, treated_missing_data_klines = replace_with_zero_where_data_is_missing(
+                last_open_time, klines)
+            
+            delta = delta_time_in_seconds_rounded_from_integers_hours_between_utc_and(binance_server_time())
+            
+            formated_klines = format_klines(treated_missing_data_klines, delta)
+                
+            save_in_table_job_status = pg.save_data_in_table(table_name, keys, formated_klines)
+
+            if (len(klines) > 500): break #TODO: Isto é uma anomalia, deve ser tratada
+                
+        else: pass #TODO: Tratar exceção (Falha de comunicação com a binance, klines nulas)
+
+        requests_limit_reached = test_binance_request_limit()
+        
+        if(requests_limit_reached): time.sleep(65)
+
+    was_entry_updated_to_full = pg.update_entry('binance_assets', 'asset_symbol', asset_symbol, 'status', 'full')
+
+    if not (was_entry_updated_to_full): pass #TODO: Tratar exceção
+
+if __name__ == "__main__":
     
-    if(requests_limit_reached): time.sleep(65)
-
-was_entry_updated_to_full = pg.update_entry('binance_assets', 'asset_symbol', asset_symbol, 'status', 'full')
-
-if not (was_entry_updated_to_full): pass #TODO: Tratar exceção
+    main()
