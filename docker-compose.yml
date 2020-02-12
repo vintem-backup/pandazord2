@@ -59,9 +59,6 @@ services:
   binancedatahandler:
     build: ./binancedatahandler
     
-    ports:
-      - '$BINANCE_HANDLER_PORT:80'
-    
     env_file:
       - '.env'
     
