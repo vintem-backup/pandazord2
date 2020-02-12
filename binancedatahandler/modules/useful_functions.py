@@ -6,8 +6,6 @@ import os
 from copy import deepcopy
 import psutil
 
-oldest_open_time_in_milliseconds = 1241893500000
-#oldest_open_time_in_milliseconds = os.environ['oldest_open_time_in_milliseconds']
 
 def utc_time_func():
     
@@ -89,11 +87,10 @@ def format_klines(raw_klines, delta):
     return klines
 
 
-def replace_with_zero_where_data_is_missing(last_open_time, klines):
-    
-    oldest_open_time = bool(last_open_time == oldest_open_time_in_milliseconds)
-    
-    if (oldest_open_time): klines_out = klines
+def replace_with_zero_where_data_is_missing(oldest_open_time, last_open_time, klines):
+
+    #This indicates the first call, so the adjust must be bypassed
+    if (last_open_time == oldest_open_time): klines_out = klines
     
     else:
         
