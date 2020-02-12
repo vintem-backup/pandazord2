@@ -21,6 +21,7 @@ POSTGRES_DB = os.environ['POSTGRES_DB']
 POSTGRES_PASSWORD = os.environ['POSTGRES_PASSWORD']
 '''
 candle_interval = '1m'
+
 pg = PG(DB_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD)
 
 def main():
@@ -38,21 +39,25 @@ def main():
                 for binance_asset in binance_assets:
 
                     pid = binance_asset['last_modified_by']
+                    
+                    oldest_open_time = (int(datetime.timestamp(
+                        binance_asset['collect_data_from'])))*1000 #milisseconds
 
                     if (binance_asset['auto_update'] == 'ON'):
 
                         if not (running_this_subprocess(pid)):
 
-                            pid = subprocess.Popen([sys.executable, 
-                                                    'complete_oldest_data_so_far.py', 
-                                                    str(binance_asset['asset_symbol']), 
-                                                    candle_interval])
+                            complete_data_subprocess = subprocess.Popen([sys.executable,
+                            'complete_oldest_data_so_far.py',
+                            str(binance_asset['asset_symbol']),
+                            candle_interval,
+                            str(oldest_open_time)])
 
                             was_entry_updated_pid = pg.update_entry('binance_assets', 
                                                         'asset_symbol', 
                                                         str(binance_asset['asset_symbol']),
                                                         'last_modified_by',
-                                                        int(pid.pid))
+                                                        int(complete_data_subprocess.pid))
 
                             if not (was_entry_updated_pid): pass #TODO: Tratar exceção
 
