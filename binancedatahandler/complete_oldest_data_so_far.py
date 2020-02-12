@@ -19,11 +19,17 @@ POSTGRES_PASSWORD = os.environ['POSTGRES_PASSWORD']
 
 pg = PG(DB_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD)
 
-def return_last_open_time_from_db_or_create_table_if_doesnt_exist(oldest_open_time, table_name, keys_dict):
+oldest_open_time_in_milliseconds = 1241893500000
+#oldest_open_time_in_milliseconds = os.environ['oldest_open_time_in_milliseconds']
+
+def return_last_open_time_from_db_or_create_table_if_doesnt_exist(table_name):
+
+    keys_dict = {'open_time': 'timestamp', 'open': 'numeric', 'high': 'numeric', 'low': 'numeric', 
+                 'close': 'numeric', 'volume': 'numeric'}
     
     table_was_created = pg.create_table(table_name, keys_dict, pk='open_time')
     
-    if (table_was_created): last_open_time = oldest_open_time
+    if (table_was_created): last_open_time = oldest_open_time_in_milliseconds
     
     else:
         
@@ -38,33 +44,32 @@ def return_last_open_time_from_db_or_create_table_if_doesnt_exist(oldest_open_ti
             
             last_open_time = int(1000*(datetime.timestamp(last_open_time_datetime_format) - delta))
             
-        except: last_open_time = oldest_open_time
+        except: last_open_time = oldest_open_time_in_milliseconds
     
     return last_open_time
 
 
+asset_symbol = str(sys.argv[1])
+#asset_symbol = 'BTCUSDT'
+
+candle_interval = str(sys.argv[2])
+#candle_interval = '1m'
+
+table_name = 'binance_klines_' + asset_symbol + '_' + candle_interval
+
+keys = {'open_time': 'timestamp', 'open': 'numeric', 'high': 'numeric', 'low': 'numeric', 'close': 'numeric',
+    'volume': 'numeric'}
+
+max_attempts = 10 #TODO: Pode vir de um parâmetro depois
+
 def main():
-
-    asset_symbol = str(sys.argv[1])
-
-    candle_interval = str(sys.argv[2])
-
-    oldest_open_time = int(sys.argv[3])
-
-    table_name = 'binance_klines_' + asset_symbol + '_' + candle_interval
-
-    keys_dict = {'open_time': 'timestamp', 'open': 'numeric', 'high': 'numeric', 'low': 'numeric', 'close': 'numeric',
-        'volume': 'numeric'}
-
-    max_attempts = 10 #TODO: Pode vir de um parâmetro depois
 
     was_entry_updated_to_building = pg.update_entry('binance_assets', 
                                                     'asset_symbol', asset_symbol, 'status', 'building')
 
     if not (was_entry_updated_to_building): pass #TODO: Tratar exceção
 
-    last_open_time = return_last_open_time_from_db_or_create_table_if_doesnt_exist(
-        oldest_open_time, table_name, keys_dict)
+    last_open_time = return_last_open_time_from_db_or_create_table_if_doesnt_exist(table_name)
 
     while True:
 
@@ -83,13 +88,13 @@ def main():
                 if (len(klines) == 0): break
 
             last_open_time, treated_missing_data_klines = replace_with_zero_where_data_is_missing(
-                oldest_open_time, last_open_time, klines)
+                last_open_time, klines)
             
             delta = delta_time_in_seconds_rounded_from_integers_hours_between_utc_and(binance_server_time())
             
             formated_klines = format_klines(treated_missing_data_klines, delta)
                 
-            save_in_table_job_status = pg.save_data_in_table(table_name, keys_dict, formated_klines)
+            save_in_table_job_status = pg.save_data_in_table(table_name, keys, formated_klines)
 
             if (len(klines) > 500): break #TODO: Isto é uma anomalia, deve ser tratada
                 
