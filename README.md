@@ -12,6 +12,16 @@ A lingagem de programação predominante no robô é o Python.
 
 A intenção é conceber uma arquitetura baseada em *microsserviços*, isolados em *containers Docker*.
 
+## Vulnerabilidades Conhecidas
+
+### PID em docker
+
+Os números dos PIDs dos subprocessos ficam armazenados no banco. Caso o cluster caia e reinicie, esses números são "lembrados" pelo volume. Pode ocorrer de os novos processos disparados terem PIDs iguais aos dos processos "mortos", então, do jeito que a lógica foi concebida, esses processos (que deveriam estar 'mortos') não serão mortos, já que há um novo processo com o mesmo o número. Assim, o ativo que tinha esse número ficará sem atualização, até que o ativo cujo novo processo com o mesmo PID atualize 100%.
+
+### Erro de leitura da tabela no programa complete_oldest_data_so_far.py
+
+Da forma como foi escrita a função de consulta ao banco de dados, caso a função *return_last_open_time_from_db_or_create_table_if_doesnt_exist* não consiga ler da tabela (retorna lista vazia, e não *"raise error"*), a mesma  retornará o timestamp mais antigo (definido pelo usuário) o que pode conflitar com o valor real do último candle fechado armazenado no banco.
+
 ## Etapas de desenvolvimento
 
 ### Prova de conceito
