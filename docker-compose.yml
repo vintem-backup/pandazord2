@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   postgres:
-    image: 'postgres:12-alpine'
+    image: 'postgres:12.1-alpine'
     
     env_file:
       - '.env'
@@ -20,7 +20,7 @@ services:
           - postgres
 
   pgadmin:
-    image: dpage/pgadmin4
+    image: 'dpage/pgadmin4:latest'
     
     logging:
       driver: none 
