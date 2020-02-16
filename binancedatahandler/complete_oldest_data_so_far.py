@@ -5,12 +5,6 @@ from modules.useful_functions import *
 from modules.binance_handler import *
 from modules.postgres_handler import PostgresHandler as PG
 
-'''
-DB_HOST = 'localhost'
-POSTGRES_USER = 'pandazord'
-POSTGRES_DB = 'pandazord_database'
-POSTGRES_PASSWORD = '06Fj@%r7KTXm5+eWn2'
-'''
 DB_HOST = os.environ['DB_HOST']
 POSTGRES_USER = os.environ['POSTGRES_USER']
 POSTGRES_DB = os.environ['POSTGRES_DB']
@@ -20,24 +14,24 @@ pg = PG(DB_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD)
 
 def return_last_open_time_from_db_or_create_table_if_doesnt_exist(oldest_open_time, table_name, keys_dict):
 
-    table_was_created = pg.create_table(table_name, keys_dict, pk='open_time')
+    last_open_time = oldest_open_time
     
-    if (table_was_created): last_open_time = oldest_open_time
-    
-    else:
+    try:
+
+        last_open_time_datetime_format = pg.read_entries_from_table(table_name, 
+                                                    field_key = 'open_time', 
+                                                    sort_type = 'DESC', 
+                                                    limit = 1)[0][0]
+
+        delta = delta_time_in_seconds_rounded_from_integers_hours_between_utc_and(binance_server_time())
+
+        last_open_time = int(1000*(datetime.timestamp(last_open_time_datetime_format) - delta))
+
+    except:
         
-        try:
-            
-            last_open_time_datetime_format = pg.read_entries_from_table(table_name, 
-                                                        field_key = 'open_time', 
-                                                        sort_type = 'DESC', 
-                                                        limit = 1)[0][0]
-            
-            delta = delta_time_in_seconds_rounded_from_integers_hours_between_utc_and(binance_server_time())
-            
-            last_open_time = int(1000*(datetime.timestamp(last_open_time_datetime_format) - delta))
-            
-        except: last_open_time = oldest_open_time
+        table_was_created = pg.create_table(table_name, keys_dict, pk='open_time')
+    
+        if not (table_was_created): pass #TODO: tratar exceção
     
     return last_open_time
 

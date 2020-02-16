@@ -93,14 +93,14 @@ DATABASES = {
         'PORT': int(os.environ['PG_PORT']), 
     }
 }
-'''
 
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'pandazord_database',                      
         'USER': 'pandazord',
-        'PASSWORD': '06Fj@%r7KTXm5+eWn2',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': 5432, 
     }

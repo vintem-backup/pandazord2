@@ -6,15 +6,10 @@ import subprocess
 import time
 import psutil
 from datetime import datetime
+from iteration_utilities import duplicates, unique_everseen
 from modules.postgres_handler import PostgresHandler as PG
 from modules.useful_functions import *
 
-'''
-DB_HOST = 'localhost'
-POSTGRES_USER = 'pandazord'
-POSTGRES_DB = 'pandazord_database'
-POSTGRES_PASSWORD = '06Fj@%r7KTXm5+eWn2'
-'''
 DB_HOST = os.environ['DB_HOST']
 POSTGRES_USER = os.environ['POSTGRES_USER']
 POSTGRES_DB = os.environ['POSTGRES_DB']
@@ -34,11 +29,15 @@ def main():
 
             if (len(binance_assets) == 0): time.sleep(1)
 
-            else: 
+            else:
+                
+                pid_list = []
 
                 for binance_asset in binance_assets:
 
                     pid = binance_asset['last_modified_by']
+                    
+                    pid_list.append(pid)
                     
                     oldest_open_time = (int(datetime.timestamp(
                         binance_asset['collect_data_from'])))*1000 #milisseconds
@@ -65,6 +64,15 @@ def main():
 
                         if(running_this_subprocess(pid)): psutil.Process(pid).kill()
 
+                #Killing duplicated PIDs
+                duplicated_pid_list = list(unique_everseen(duplicates(pid_list)))
+                
+                if (len(duplicated_pid_list) > 0):
+
+                    for duplicated_pid in duplicated_pid_list:
+
+                        if(running_this_subprocess(duplicated_pid)): psutil.Process(duplicated_pid).kill()
+                
                 time.sleep(60 - int(datetime.now().second))
 
         except (Exception) as error: time.sleep(1)
