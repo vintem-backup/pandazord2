@@ -20,11 +20,12 @@ Os números dos PIDs dos subprocessos ficam armazenados no banco. Caso o cluster
 
 - Sugestão de correção
 
-    Durante a leitura da tabela *"binance_assets"*, colecionar os PIDs numa lista, levantar os PIDs repetidos, matar os PIDs repetidos.
+    - 1) Durante a leitura da tabela *"binance_assets"*, colecionar os PIDs numa lista, levantar os PIDs repetidos, matar os PIDs repetidos.
 
 - Status
 
-    Implementando correção.
+     - 1) Implementando sugestão de correção 1.
+     - 2) Sugestão 1 implementada, testada e funcionando. Porém, caso o PID pertença a outro processo que não aqueles lançados no subprocess (o que é improvável, porém aconteceu nos testes, porque os números de PID foram "inventados" sem conferir se pertenciam a outros processos do sistema) o **psutil** falhará, por não ter acesso ao PID.
 
 ### Erro de leitura da tabela no programa complete_oldest_data_so_far.py
 
