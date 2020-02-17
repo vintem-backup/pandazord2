@@ -54,12 +54,12 @@ def main():
 
     if not (was_entry_updated_to_building): pass #TODO: Tratar exceção
 
-    last_open_time = return_last_open_time_from_db_or_create_table_if_doesnt_exist(
-        oldest_open_time, table_name, keys_dict)
-
     while True:
 
         klines = []
+
+        last_open_time = return_last_open_time_from_db_or_create_table_if_doesnt_exist(
+            oldest_open_time, table_name, keys_dict)
         
         start_time = str(last_open_time + 30000)  #Um passo de 30s (30000 milissegundos)
             
@@ -73,7 +73,7 @@ def main():
                 
                 if (len(klines) == 0): break
 
-            last_open_time, treated_missing_data_klines = replace_with_zero_where_data_is_missing(
+            treated_missing_data_klines = replace_with_zero_where_data_is_missing(
                 oldest_open_time, last_open_time, klines)
             
             delta = delta_time_in_seconds_rounded_from_integers_hours_between_utc_and(binance_server_time())
