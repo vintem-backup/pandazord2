@@ -119,9 +119,7 @@ def replace_with_zero_where_data_is_missing(oldest_open_time, last_open_time, kl
                 klines_out[i][4] = 0.0 #Close
                 klines_out[i][5] = 0.0 #volume
 
-    last_open_time = int((klines_out[len(klines_out)-1][0]))
-    
-    return last_open_time, klines_out
+    return klines_out
 
 
 def running_this_subprocess(pid):
