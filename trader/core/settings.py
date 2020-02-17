@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'controllers',
 ]
 
@@ -82,7 +83,7 @@ DATABASES = {
     }
 }
 '''
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -100,12 +101,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'pandazord_database',                      
         'USER': 'pandazord',
-        'PASSWORD': '',
+        'PASSWORD': 'QBBV9E%pcYKHUcjj',
         'HOST': 'localhost',
         'PORT': 5432, 
     }
 }
-'''
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
