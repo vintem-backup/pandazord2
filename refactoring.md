@@ -15,6 +15,7 @@
 
 ### klinesfromdb
 
+* [ ] Adicionar método para pegar toda a massa de dados de 1m disponível para aquele par, para backintest  
 * [ ] Adicionar método para pegar as *klines* **a partir de** e **até** um *datetime* específicos  
 * [ ] Adicionar método para apenas "atualizar" a *kline*, "memorizando" a massa de dados mais extensa,substituindo a entrada mais antiga e adicionando uma entrada mais recente.  
 * [ ] Escrever os testes  
