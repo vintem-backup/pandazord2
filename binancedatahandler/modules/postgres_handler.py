@@ -5,6 +5,7 @@ import psycopg2.extras
 class PostgresHandler: #TODO: Adicionar Type Annotations
 
     #TODO:
+    # - Verificar se é necessário declarar a porta no .conect do psycopg2. Parece que tá usando default
     # - Criar função para deletar registros
     # - Criar função para deletar tabelas
 
