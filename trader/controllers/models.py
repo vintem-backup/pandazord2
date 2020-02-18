@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 
+#TODO: Renomear esta tabela, lembrando da propagação para os progrmas que dela dependem
 class BinanceAsset (models.Model):
 
     class Meta:
