@@ -43,7 +43,7 @@ services:
           - pgadmin
 
   webinterface:
-    build: ./trader
+    build: ./webinterface
     
     ports:
       - '$WEBINTERFACE_PORT:8000'
@@ -67,7 +67,7 @@ services:
     
     depends_on:
       - postgres
-      - trader
+      - webinterface
     
     networks:
       backend:
