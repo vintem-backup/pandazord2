@@ -33,14 +33,14 @@ def main():
                 
                 pid_list = []
 
-                for binance_asset in binance_assets:
+                for binance_asset in binance_assets:last_updated_by_pid
 
-                    pid = binance_asset['last_modified_by']
+                    pid = binance_asset['last_updated_by_pid']
                     
                     pid_list.append(pid)
                     
                     oldest_open_time = (int(datetime.timestamp(
-                        binance_asset['collect_data_from'])))*1000 #milisseconds
+                        binance_asset['collect_data_since'])))*1000 #milisseconds
 
                     if (binance_asset['auto_update'] == 'ON'):
 
@@ -55,7 +55,7 @@ def main():
                             was_entry_updated_pid = pg.update_entry('binance_assets', 
                                                         'asset_symbol', 
                                                         str(binance_asset['asset_symbol']),
-                                                        'last_modified_by',
+                                                        'last_updated_by_pid',
                                                         int(complete_data_subprocess.pid))
 
                             if not (was_entry_updated_pid): pass #TODO: Tratar exceção
