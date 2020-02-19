@@ -11,7 +11,6 @@ jupyter = "*"
 django = "*"
 psycopg2-binary = "*"
 django-extensions = "*"
-pandas = "*"
 
 [requires]
 python_version = "3.8"
