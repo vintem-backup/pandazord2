@@ -28,4 +28,4 @@ else:
     pass"
 fi
 
-exec pipenv run python manage.py runserver $TRADER_HOST:8000
+exec pipenv run python manage.py runserver $WEBINTERFACE:8000
