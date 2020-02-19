@@ -33,7 +33,7 @@ def main():
                 
                 pid_list = []
 
-                for binance_asset in binance_assets:last_updated_by_pid
+                for binance_asset in binance_assets:
 
                     pid = binance_asset['last_updated_by_pid']
                     
