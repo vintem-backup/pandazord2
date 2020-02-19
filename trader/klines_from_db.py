@@ -1,4 +1,4 @@
-#from django.db import models
+#v0.0.2
 
 import pandas as pd
 import psycopg2
@@ -15,21 +15,9 @@ class BinanceKlines:
         self.POSTGRES_PASSWORD = POSTGRES_PASSWORD
     
     
-    def get_latest_one_minute_klines_dataframe(self, asset_symbol, number_of_one_minute_entries):
+    def latest_one_minute(self, sql_query):
         
-        one_minute_klines = pd.DataFrame()
-        
-        table_name = 'binance_klines_' + asset_symbol + '_1m'
-        
-        field_key = 'open_time'
-
-        sort_type = 'DESC'
-
-        limit = str(number_of_one_minute_entries)
-        
-        sql_basic_select_query = 'SELECT * FROM ' + table_name
-
-        sql_query = sql_basic_select_query + ' ORDER BY ' + field_key + ' ' + sort_type + ' LIMIT ' + limit
+        one_minute_klines = pd.DataFrame(columns = ['open_time', 'open', 'high', 'low', 'close', 'volume'])
 
         with psycopg2.connect("host={} port={} dbname={} user={} password={}".\
                               format(self.DB_HOST, 
@@ -50,19 +38,49 @@ class BinanceKlines:
                                                                               na_position='last', 
                                                                               ignore_index=True)
         
-        return one_minute_klines
+        return one_minute_klines    
+    
+    
+    def the_n_latest_one_minute(self, asset_symbol, number_of_one_minute_entries):
+        
+        table_name = 'binance_klines_' + asset_symbol + '_1m'
+        
+        field_key = 'open_time'
+
+        sort_type = 'DESC'
+
+        limit = str(number_of_one_minute_entries)
+        
+        sql_basic_select_query = 'SELECT * FROM ' + table_name
+
+        sql_query = sql_basic_select_query + ' ORDER BY ' + field_key + ' ' + sort_type + ' LIMIT ' + limit
+
+        n_minute_klines = self.latest_one_minute(sql_query)
+        
+        return n_minute_klines
+
+    
+    def all_latest_one_minute(self, asset_symbol):
+
+        table_name = 'binance_klines_' + asset_symbol + '_1m'
+
+        sql_query = 'SELECT * FROM ' + table_name
+
+        all_minute_klines = self.latest_one_minute(sql_query)
+        
+        return all_minute_klines
 
     
     def get_latest(self, asset_symbol, candle_interval, number_of_candles):
         
-        klines = pd.DataFrame(columns = ['open_time', 'open', 'high', 'low', 'close', 'volume'])
+        if (candle_interval == '1m'):
 
-        if (candle_interval == '1m'): 
-
-            klines = self.get_latest_one_minute_klines_dataframe(asset_symbol, number_of_candles)
+            final_klines = self.the_n_latest_one_minute(asset_symbol, number_of_candles)
 
         else:
-
+                    
+            klines = pd.DataFrame(columns = ['open_time', 'open', 'high', 'low', 'close', 'volume'])
+            
             number_of_one_minute_candles = {'3m':3, '5m':5, '15m':15, '30m':30, '1h':60, '2h':120, 
                                         '4h':240, '6h':360, '12h':720, '1d':1440, '1w':10080}
 
@@ -70,11 +88,11 @@ class BinanceKlines:
             
             number_of_entries = number_of_candles*slice_size
 
-            klines_in = self.get_latest_one_minute_klines_dataframe(asset_symbol, number_of_entries)
+            klines_in = self.the_n_latest_one_minute(asset_symbol, number_of_entries)
 
-            start_index = 0; end_index = slice_size; i=0
+            end_index = len(klines_in); start_index = end_index - slice_size; i=number_of_candles
 
-            while end_index < (len(klines_in) + 1):
+            while i > 0:
 
                 work_klines = pd.DataFrame()
 
@@ -92,6 +110,9 @@ class BinanceKlines:
 
                 klines.loc[i, 'volume'] = work_klines['volume'].sum()
 
-                i+=1; start_index+=slice_size; end_index+=slice_size
+                i-=1; start_index-=slice_size; end_index-=slice_size
+                
+            final_klines = klines.sort_values(by = ['open_time'], axis=0, ascending=True, inplace=False, 
+                                              kind='quicksort', na_position='last', ignore_index=True) 
 
-        return klines
+        return final_klines
