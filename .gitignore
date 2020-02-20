@@ -10,6 +10,9 @@ djangolog
 *.ipynb
 dev/*
 
+#Coisas provisórias
+trader/postgres_handler.py
+
 # Vscode stuff:
 .vscode/*
 !.vscode/settings.json
