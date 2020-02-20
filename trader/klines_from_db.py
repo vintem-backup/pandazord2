@@ -1,42 +1,16 @@
-#v0.0.2
-
 import pandas as pd
-import psycopg2
 
-class BinanceKlines:
+from modules.shared_objects import DataframeFromDb
+
+class BinanceKlines(DataframeFromDb):
     
     def __init__(self, DB_HOST, DB_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD):
         
-        super().__init__()
-        self.DB_HOST = DB_HOST
-        self.DB_PORT = DB_PORT
-        self.POSTGRES_DB = POSTGRES_DB
-        self.POSTGRES_USER = POSTGRES_USER
-        self.POSTGRES_PASSWORD = POSTGRES_PASSWORD
-    
+        super().__init__(DB_HOST, DB_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD)
     
     def latest_one_minute(self, sql_query):
         
-        one_minute_klines = pd.DataFrame(columns = ['open_time', 'open', 'high', 'low', 'close', 'volume'])
-
-        with psycopg2.connect("host={} port={} dbname={} user={} password={}".\
-                              format(self.DB_HOST, 
-                                     self.DB_PORT, 
-                                     self.POSTGRES_DB, 
-                                     self.POSTGRES_USER, 
-                                     self.POSTGRES_PASSWORD)) as connection:
-            
-            one_minute_reversed_klines = pd.read_sql(sql_query, connection, index_col=None, 
-                                                     coerce_float=True, params=None, parse_dates=None, 
-                                                     columns=None, chunksize=None)
-    
-            one_minute_klines = one_minute_reversed_klines.sort_values(by = ['open_time'], 
-                                                                              axis=0, 
-                                                                              ascending=True, 
-                                                                              inplace=False, 
-                                                                              kind='quicksort', 
-                                                                              na_position='last', 
-                                                                              ignore_index=True)
+        one_minute_klines = super().get(sql_query)
         
         return one_minute_klines    
     
