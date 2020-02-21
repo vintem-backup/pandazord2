@@ -24,6 +24,8 @@ class TransformFromOneMinute:
 
     def __init__(self, klines_in):
 
+        #TODO: Adicionar teste para verificação se a kline é de 1m
+        
         self.klines_in = klines_in
 
         
