@@ -1,12 +1,15 @@
-from .shared_objects import PriceSeriesFrom
+#TODO: Docstrings and Type annotations
+
+from .common_libs import PriceSeriesFrom
+from .market_indicators import *
 
 
-class CrossingMovingAverages:
+class CrossingSimpleMovingAverages:
     
-    def __init__(self, sample_number_pair, price_source):
+    def __init__(self, sample_numbers, price_source):
         
-        self.n_smaller = sample_number_pair[0]
-        self.n_bigger = sample_number_pair[1]
+        self.n_smaller = sample_numbers[0]
+        self.n_bigger = sample_numbers[1]
         self.price_source = price_source
         
     def set_side(self, klines):
@@ -15,16 +18,20 @@ class CrossingMovingAverages:
         
         if (len(klines) < self.n_bigger):
             
-            raise IndexError ('There os no sufficient klines \
-entrys to calculate the bigger moving avarage')
+            raise IndexError ('There os no sufficient klines entrys to calculate the bigger moving avarage')
+        
         else:
             
             price = getattr(PriceSeriesFrom(klines), self.price_source + '_')()
             
-            last_small_rolling_mean = price.rolling(self.n_smaller).mean()[len(price) - 1]
+            RollingMean = Trend(price).simple_moving_average
+
+            last_smaller = RollingMean(self.n_smaller)[len(price) - 1]
             
-            last_big_rolling_mean = price.rolling(self.n_bigger).mean()[len(price) - 1]
+            last_bigger = RollingMean(self.n_bigger)[len(price) - 1]
+
+            print ('Média longa = {}, média curta = {}'.format(last_bigger, last_smaller))
             
-            if (last_small_rolling_mean > last_big_rolling_mean): side = 'buy'
+            if (last_smaller > last_bigger): side = 'buy'
         
         return side
