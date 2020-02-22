@@ -27,16 +27,8 @@ class DataframeFromDb:
                                          self.POSTGRES_USER, 
                                          self.POSTGRES_PASSWORD)) as connection:
 
-                reversed_dataframe = pd.read_sql(sql_query, connection, index_col=None,coerce_float=True,
+                dataframe = pd.read_sql(sql_query, connection, index_col=None,coerce_float=True,
                                                  params=None, parse_dates=None, columns=None, chunksize=None)
-
-                dataframe = reversed_dataframe.sort_values(by = ['open_time'], 
-                                                                   axis=0,
-                                                                   ascending=True, 
-                                                                   inplace=False, 
-                                                                   kind='quicksort', 
-                                                                   na_position='last', 
-                                                                   ignore_index=True)
 
             return dataframe
         

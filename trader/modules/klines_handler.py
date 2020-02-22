@@ -2,9 +2,9 @@
 
 import pandas as pd
 
-from common_libs import DataframeFromDb
+from .common_libs import DataframeFromDb
 
-class OneMinuteNumber:
+class OneMinuteNumber: #Number --> Amount
 
     def __init__(self, out_candle_interval):
         
@@ -25,7 +25,7 @@ class TransformFromOneMinute:
     def __init__(self, klines_in):
 
         #TODO: Adicionar teste para verificação se a kline é de 1m
-        
+
         self.klines_in = klines_in
 
         
@@ -81,9 +81,10 @@ class BinanceFromDb(DataframeFromDb):
 
         sql_query = sql_basic_select_query + ' ORDER BY ' + field_key + ' ' + sort_type + ' LIMIT ' + limit
         
-        return self.get_dataframe_one_minute_by_sql(sql_query)
+        return (self.get_dataframe_one_minute_by_sql(sql_query)).sort_values(by = ['open_time'], 
+        axis=0, ascending=True, inplace=False, kind='quicksort', na_position='last', ignore_index=True)
 
-    
+
     def all_latest_one_minute(self, asset_symbol):
 
         table_name = 'binance_klines_' + asset_symbol + '_1m'
