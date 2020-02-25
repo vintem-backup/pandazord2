@@ -4,7 +4,7 @@ from .common_libs import PriceSeriesFrom
 from .market_indicators import *
 
 
-class CrossingSimpleMovingAverages:
+class CrossSMA:
     
     def __init__(self, sample_numbers, price_source):
         
