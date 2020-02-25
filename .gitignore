@@ -2,6 +2,7 @@
 BKP*
 TODO.md
 Pipfile.lock
+**/dev*
 
 **/migrations/*
 */jupyterlog
