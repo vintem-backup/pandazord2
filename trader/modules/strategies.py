@@ -24,11 +24,11 @@ class CrossingSimpleMovingAverages:
             
             price = getattr(PriceSeriesFrom(klines), self.price_source + '_')()
             
-            RollingMean = Trend(price).simple_moving_average
+            rolling_mean = Trend(price).simple_moving_average
 
-            last_smaller = RollingMean(self.n_smaller)[len(price) - 1]
+            last_smaller = rolling_mean(self.n_smaller)[len(price) - 1]
             
-            last_bigger = RollingMean(self.n_bigger)[len(price) - 1]
+            last_bigger = rolling_mean(self.n_bigger)[len(price) - 1]
 
             print ('Média longa = {}, média curta = {}'.format(last_bigger, last_smaller))
             
