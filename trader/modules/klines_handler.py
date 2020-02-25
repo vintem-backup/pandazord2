@@ -1,10 +1,11 @@
-#TODO: Docstrings and Type annotations
-
+from pgmask.dataframelayer import DataframeLayer as PG_DF
+#from pgmask.basiclayer import BasicLayer as PG_BL
 import pandas as pd
 
-from .common_libs import DataframeFromDb
+#TODO: Docstrings and Type annotations
 
-class OneMinuteNumber: #Number --> Amount
+
+class OneMinuteCandlesAmount:
 
     def __init__(self, out_candle_interval):
         
@@ -16,11 +17,11 @@ class OneMinuteNumber: #Number --> Amount
         self.per_out_candle = number_of_one_minute_candles[out_candle_interval]
 
     
-    def total_entrys(self, out_candle_number):
+    def total(self, out_candle_number):
 
         return out_candle_number*self.per_out_candle
 
-class TransformFromOneMinute:
+class Transform:
 
     def __init__(self, klines_in):
 
@@ -29,11 +30,11 @@ class TransformFromOneMinute:
         self.klines_in = klines_in
 
         
-    def to(self, out_candle_interval):
+    def from_1m_to(self, out_candle_interval):
         
         klines = pd.DataFrame(columns = ['open_time', 'open', 'high', 'low', 'close', 'volume'])
 
-        slice_size = OneMinuteNumber(out_candle_interval).per_out_candle
+        slice_size = OneMinuteCandlesAmount(out_candle_interval).per_out_candle
 
         end_index = len(self.klines_in); start_index = end_index - slice_size; i = 0
 
@@ -55,44 +56,27 @@ class TransformFromOneMinute:
                                   kind='quicksort', na_position='last', ignore_index=True) 
 
     
-class BinanceFromDb(DataframeFromDb):
+class BinanceFromDb:
     
-    def __init__(self, DB_HOST, DB_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD):
+    def __init__(self, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME):
         
-        super().__init__(DB_HOST, DB_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD)
-    
-
-    def get_dataframe_one_minute_by_sql(self, sql_query):
-        
-        return super().get(sql_query)
+        self.PGDF = PG_DF(DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
     
     
     def latest_one_minute(self, asset_symbol, number_of_one_minute_entries):
         
         table_name = 'binance_klines_' + asset_symbol + '_1m'
         
-        field_key = 'open_time'
-
-        sort_type = 'DESC'
-
-        limit = str(number_of_one_minute_entries)
-        
-        sql_basic_select_query = 'SELECT * FROM ' + table_name
-
-        sql_query = sql_basic_select_query + ' ORDER BY ' + field_key + ' ' + sort_type + ' LIMIT ' + limit
-        
-        return (self.get_dataframe_one_minute_by_sql(sql_query)).sort_values(by = ['open_time'], 
-        axis=0, ascending=True, inplace=False, kind='quicksort', na_position='last', ignore_index=True)
+        return self.PGDF.latest_entries(table_name, field_key = 'open_time', 
+                                        number_entries = number_of_one_minute_entries)
 
 
     def all_latest_one_minute(self, asset_symbol):
 
         table_name = 'binance_klines_' + asset_symbol + '_1m'
-
-        sql_query = 'SELECT * FROM ' + table_name
         
-        return self.get_dataframe_one_minute_by_sql(sql_query)
-
+        return self.PGDF.latest_entries(table_name)
+    
     
     def get_latest(self, asset_symbol, candle_interval, number_of_candles):
         
@@ -102,10 +86,10 @@ class BinanceFromDb(DataframeFromDb):
 
         else:
             
-            number_of_entries = OneMinuteNumber(candle_interval).total_entrys(number_of_candles)
+            number_of_entries = OneMinuteCandlesAmount(candle_interval).total(number_of_candles)
             
             klines_in = self.latest_one_minute(asset_symbol, number_of_entries)
             
-            klines = TransformFromOneMinute(klines_in).to(candle_interval)
+            klines = Transform(klines_in).from_1m_to(candle_interval)
     
         return klines
