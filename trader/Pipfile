@@ -10,6 +10,7 @@ jupyter = "*"
 [packages]
 psycopg2-binary = "*"
 pandas = "*"
+pgmask = "*"
 
 [requires]
 python_version = "3.8"
