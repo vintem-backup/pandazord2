@@ -1,43 +1,5 @@
 #TODO: Docstrings and Type annotations
 
-import pandas as pd
-import psycopg2
-
-class DataframeFromDb:
-    
-    def __init__(self, DB_HOST, DB_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD):
-        
-        super().__init__()
-        self.DB_HOST = DB_HOST
-        self.DB_PORT = DB_PORT
-        self.POSTGRES_DB = POSTGRES_DB
-        self.POSTGRES_USER = POSTGRES_USER
-        self.POSTGRES_PASSWORD = POSTGRES_PASSWORD
-
-    def get(self, sql_query):
-        
-        try:
-        
-            dataframe = pd.DataFrame()
-
-            with psycopg2.connect("host={} port={} dbname={} user={} password={}".\
-                                  format(self.DB_HOST, 
-                                         self.DB_PORT, 
-                                         self.POSTGRES_DB, 
-                                         self.POSTGRES_USER, 
-                                         self.POSTGRES_PASSWORD)) as connection:
-
-                dataframe = pd.read_sql(sql_query, connection, index_col=None,coerce_float=True,
-                                                 params=None, parse_dates=None, columns=None, chunksize=None)
-
-            return dataframe
-        
-        except Exception as err:
-            
-            table_not_found = bool(("relation" and "does not exist") in str(err))
-            
-            if (table_not_found): raise Exception('Table not found')
-
 
 class PriceSeriesFrom:
     
