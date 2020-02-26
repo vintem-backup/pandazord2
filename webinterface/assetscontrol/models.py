@@ -1,22 +1,57 @@
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 from datetime import datetime
 
-#TODO: Renomear esta tabela, lembrando da propagação para os progrmas que dela dependem
+AUTO_UPDATE_CHOICES=(
+    ('ON','on'),
+    ('OFF','off'),
+    )
+
+TRADE_CHOICES=(
+    ('Y', 'yes'),
+    ('N', 'no'),
+)
+
+def default_operational_parameters():
+    
+    return {
+        'strategy' : {
+            'name' : 'CrossSMA',
+            'parameters' : {
+                'number_samples' : (3,100),
+                'treshold' : (4,10)
+            }
+        },
+
+        'stop_loss' : {
+            'name' : 'Default',
+            'parameters': {
+                'first_trigger' : (1,3,10),
+                'second_trigger' : (1,16,50)
+            }
+
+        },
+
+        'candle_interval': '12h',
+        'base_candle_interval': '1m',
+        'price_source':'ohlc4'
+
+    }
+
+def default_position():
+    
+    return {
+        'side' : 'closed',
+        'size': 0.0,
+        'target_price': 0.0
+    }
+
+
 class BinanceAsset (models.Model):
 
     class Meta:
 
         db_table = '"binance_assets"'
-    
-    AUTO_UPDATE_CHOICES=(
-        ('ON','on'),
-        ('OFF','off'),
-        )
-    
-    SIDE_CHOICES=(
-        ('S','SELL'),
-        ('B','BUY'),
-        )
 
     asset_symbol = models.CharField(max_length=8, primary_key=True)
     
@@ -27,14 +62,14 @@ class BinanceAsset (models.Model):
     last_updated_by_pid = models.IntegerField(null=True, blank=True)
     
     collect_data_since = models.DateTimeField(default = datetime.fromtimestamp(1241893500))
+
+    trade_on = models.CharField(max_length=3, choices=TRADE_CHOICES, default='N')
+
+    available_amount = models.FloatField(null=True, blank=True, default=0.0)
     
-    real_current_side = models.CharField(max_length=4, choices=SIDE_CHOICES, default='S')
-    
-    real_target_price = models.FloatField(null=True, blank=True)
-    
-    bt_current_side = models.CharField(max_length=4, choices=SIDE_CHOICES, default='S')
-    
-    bt_target_price = models.FloatField(null=True, blank=True)
+    operational_parameters = JSONField(default=default_operational_parameters)
+
+    position = JSONField(default=default_position)
 
     def __str__(self):
         return self.asset_symbol
