@@ -8,14 +8,14 @@ def get_historical_name(exchange_name, asset_symbol, operational_parameters):
     
     strategy_part_name = operational_parameters['strategy']['name']
     for parameter in operational_parameters['strategy']['parameters']:
-        
-        for item in parameter:
+
+        for item in operational_parameters['strategy']['parameters'][parameter]:
             strategy_part_name = strategy_part_name + str(item)
 
     stop_part_name = operational_parameters['stop_loss']['name']
     for parameter in operational_parameters['stop_loss']['parameters']:
-        
-        for item in parameter:
+
+        for item in operational_parameters['stop_loss']['parameters'][parameter]:
             stop_part_name = stop_part_name + str(item)
     
     table_name = table_name + strategy_part_name + stop_part_name
