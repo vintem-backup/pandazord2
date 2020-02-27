@@ -2,6 +2,7 @@
 
 from .common_libs import PriceSeriesFrom
 from .market_indicators import *
+from .klines_handler import OneMinuteCandlesAmount
 
 
 class CrossSMA:
@@ -13,10 +14,12 @@ class CrossSMA:
         self.n_bigger = operational_parameters['strategy']['parameters']\
             ['number_samples'][1]
         self.price_source = operational_parameters['price_source']
-        self.positive_treshold = operational_parameters['strategy']['parameters']\
-            ['treshold'][0]
-        self.positive_treshold = operational_parameters['strategy']['parameters']\
-            ['treshold'][1]
+        self.candle_interval = operational_parameters['candle_interval']
+
+
+    def min_one_minute_candles_amount(self):
+        pass
+
         
     def set_side(self, klines):
         

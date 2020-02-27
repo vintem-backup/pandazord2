@@ -58,3 +58,6 @@ class Historical:
             hist_list.append(list(data.iloc[i]))
             
         self.PGBL.save_data_in_table(self.name, self.keys_dict, hist_list)
+    
+    def create_minimal(self):
+        pass
