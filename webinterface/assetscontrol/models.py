@@ -19,23 +19,22 @@ def default_operational_parameters():
             'name' : 'CrossSMA',
             'parameters' : {
                 'number_samples' : (3,100),
-                'treshold' : (4,10)
             }
         },
-
+        
         'stop_loss' : {
             'name' : 'Default',
             'parameters': {
                 'first_trigger' : (1,3,10),
                 'second_trigger' : (1,16,50)
             }
-
+                
         },
-
+        
         'candle_interval': '12h',
-        'base_candle_interval': '1m',
+        'sleep_duration': '1m',
         'price_source':'ohlc4'
-
+        
     }
 
 def default_position():
