@@ -2,6 +2,7 @@
 BKP*
 TODO.md
 Pipfile.lock
+**/dev*
 
 **/migrations/*
 */jupyterlog
@@ -9,6 +10,10 @@ dockerlog
 djangolog
 *.ipynb
 dev/*
+**/DEV*
+
+#Coisas provisórias
+trader/postgres_handler.py
 
 # Vscode stuff:
 .vscode/*

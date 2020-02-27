@@ -8,9 +8,9 @@ ipykernel = "*"
 jupyter = "*"
 
 [packages]
+django = "*"
 psycopg2-binary = "*"
-pandas = "*"
-pgmask = "*"
+django-extensions = "*"
 
 [requires]
 python_version = "3.8"

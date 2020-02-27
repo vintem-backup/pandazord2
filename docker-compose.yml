@@ -42,11 +42,11 @@ services:
         aliases:
           - pgadmin
 
-  trader:
-    build: ./trader
+  webinterface:
+    build: ./webinterface
     
     ports:
-      - '$TRADER_PORT:8000'
+      - '$WEBINTERFACE_PORT:8000'
     
     env_file:
       - '.env'
@@ -57,7 +57,7 @@ services:
     networks:
       backend:
         aliases:
-          - trader_backend
+          - webinterface_backend
           
   binancedatahandler:
     build: ./binancedatahandler
@@ -67,7 +67,7 @@ services:
     
     depends_on:
       - postgres
-      - trader
+      - webinterface
     
     networks:
       backend:

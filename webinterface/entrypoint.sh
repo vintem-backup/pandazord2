@@ -9,17 +9,17 @@ done
 
 echo "DB started"
 
-#pipenv run python manage.py collectstatic --no-input
+#python manage.py collectstatic --no-input
 
-pipenv run python manage.py makemigrations controllers
-pipenv run python manage.py migrate controllers --noinput
+python manage.py makemigrations assetscontrol
+python manage.py migrate assetscontrol --noinput
 
-pipenv run python manage.py makemigrations
-pipenv run python manage.py migrate --noinput
+python manage.py makemigrations
+python manage.py migrate --noinput
 
 if [ $create_superuser = 'yes' ]; then
 
-pipenv run python manage.py shell -c "import os
+python manage.py shell -c "import os
 from django.contrib.auth import get_user_model
 User = get_user_model()
 if (not User.objects.filter(username=os.environ.get('SUPERUSER_NAME')).exists()):
@@ -28,4 +28,4 @@ else:
     pass"
 fi
 
-exec pipenv run python manage.py runserver $TRADER_HOST:8000
+exec python manage.py runserver $WEBINTERFACE_HOST:8000

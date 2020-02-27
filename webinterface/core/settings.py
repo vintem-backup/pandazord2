@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '40a$u&f!&q&vr+wtnve12k$qb^dow82sxw_^0w3axvvoivq-a2'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ['DEBUG'] == 'True')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = (os.environ['ALLOWED_HOSTS']).split(sep=',')
 
 
 # Application definition
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    'controllers',
+    'assetscontrol',
 ]
 
 MIDDLEWARE = [
@@ -83,7 +83,7 @@ DATABASES = {
     }
 }
 '''
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -92,18 +92,6 @@ DATABASES = {
         'PASSWORD': os.environ['POSTGRES_PASSWORD'],
         'HOST': os.environ['DB_HOST'],
         'PORT': int(os.environ['PG_PORT']), 
-    }
-}
-
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'pandazord_database',                      
-        'USER': 'pandazord',
-        'PASSWORD': 'QBBV9E%pcYKHUcjj',
-        'HOST': 'localhost',
-        'PORT': 5432, 
     }
 }
 
@@ -130,15 +118,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = os.environ['LANGUAGE_CODE']
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = os.environ['TIME_ZONE']
 
-USE_I18N = True
+USE_I18N = bool(os.environ['USE_I18N'] == 'True')
 
-USE_L10N = True
+USE_L10N = bool(os.environ['USE_L10N'] == 'True')
 
-USE_TZ = True
+USE_TZ = bool(os.environ['USE_TZ'] == 'True')
 
 
 # Static files (CSS, JavaScript, Images)

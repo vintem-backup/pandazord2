@@ -9,4 +9,4 @@ done
 
 echo "DB started"
 
-exec pipenv run python listening_of_binance_assets_table.py
+exec python listening_of_binance_assets_table.py
