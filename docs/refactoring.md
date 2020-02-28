@@ -32,5 +32,5 @@
 * [x] Adicionar método para pegar toda a massa de dados de 1m disponível para aquele par, para backingtest  
 * [ ] Adicionar método para pegar as *klines* **a partir de** e **até** um *datetime* específicos  
 * [ ] Adicionar método para apenas "atualizar" a *kline*, "memorizando" a massa de dados mais extensa,substituindo a entrada mais antiga e adicionando uma entrada mais recente (*"cache"*).  
-* [ ] Adicionar funcionalidade *"no offset"* a fim de retornar **apenas** candles ["que façam sentido"](/refactoring.md#markdown-header-Em aberto-(28/02/2020):-offset-e-treshold)
+* [ ] Adicionar funcionalidade *"no offset"* a fim de retornar **apenas** candles que façam [sentido](/refactoring.md#markdown-header-Em aberto-(28/02/2020):-offset-e-treshold)
 * [ ] Escrever os testes  
