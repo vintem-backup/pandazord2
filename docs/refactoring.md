@@ -34,3 +34,5 @@
 * [ ] Adicionar método para apenas "atualizar" a *kline*, "memorizando" a massa de dados mais extensa,substituindo a entrada mais antiga e adicionando uma entrada mais recente (*"cache"*).  
 * [ ] Adicionar funcionalidade *"no offset"* a fim de retornar **apenas** candles que façam [sentido](/refactoring.md#markdown-header-Em aberto-(28/02/2020):-offset-e-treshold)
 * [ ] Escrever os testes  
+
+[sentido](/refactoring.md#markdown-header-Em aberto-(28/02/2020):-offset-e-treshold)
