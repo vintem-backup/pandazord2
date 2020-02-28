@@ -1,6 +1,6 @@
 # Pandazord Draft
 
-[Pandazord](https://www.pandazord.trade "Pandzord's official homepage") first approach. A multimarket trading bot.
+First approach of *pandazord*, a multimarket trading bot. Se more at: [Pandazord](https://www.pandazord.trade "Pandzord's official homepage")
 
 ## O que é
 
@@ -62,3 +62,7 @@ Cryptocurrency Exchange"), utilizando uma "estratégia de calibração" simples 
 - Criação do *microsserviço* de aquisição de dados da B3;
 - Adição do *backing test* de estratégias para B3 no *microsserviço* de *backing test* ou criação de um microsserviço próprio;
 - Adição das funções de disparamento de ordens para B3 no *microsserviço* de "brocker" ou criação de um microsserviço próprio.
+
+## Refatoração
+
+Acompanhje [aqui](/docs/refactoring.md) o plano de reatoração
