@@ -12,9 +12,11 @@ Também para a concepção de backing *"tests"* mais precisos, mesmo operando co
 
 Do jeito que foi concebido, o módulo *"klines handler*", pode retornar um conjunto de candles de qualquer tamanho (desde que, "originalmente", a binance os forneça) em qualquer instante. Então, por exemplo, pode-se ter um conjunto de candles de 6h:
 
-| open_time           | open    | high    | ... |
+| `open_time`         | open    | high    | ... |
 | ------------------- |:-------:|:-------:| ---:|
 | 2019-02-26 01:19:00 | 3830.89 | 3830.89 | ... |
 | 2019-02-26 07:19:00 | 3830.89 | 3830.89 | ... |
 | 2019-02-26 19:19:00 | 3830.89 | 3830.89 | ... |
 |          ...        |   ...   |   ...   | ... |
+
+Obviamente, 
