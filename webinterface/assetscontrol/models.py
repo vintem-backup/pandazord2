@@ -31,8 +31,8 @@ def default_operational_parameters():
                 
         },
         
-        'candle_interval': '12h',
-        'sleep_duration': 65,
+        'candle_interval': '1h',
+        'sleep_duration': 60,
         'price_source':'ohlc4'
         
     }
