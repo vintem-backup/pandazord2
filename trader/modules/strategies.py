@@ -14,16 +14,11 @@ class CrossSMA:
         self.n_bigger = operational_parameters['strategy']['parameters']\
             ['number_samples'][1]
         self.price_source = operational_parameters['price_source']
-        self.candle_interval = operational_parameters['candle_interval']
-
-
-    def min_one_minute_candles_amount(self):
-        pass
 
         
-    def set_side(self, klines):
+    def what_side_and_leverage(self, klines):
         
-        side = 'sell'
+        side = 'short'; leverage = 1.0
         
         if (len(klines) < self.n_bigger):
             
@@ -41,10 +36,6 @@ class CrossSMA:
 
             print ('Média longa = {}, média curta = {}'.format(last_bigger, last_smaller))
             
-            if (last_smaller > last_bigger): side = 'buy'
+            if (last_smaller > last_bigger): side = 'long'
         
-        return side
-    
-
-    def set_order(self, klines, asset_info, historical):
-        pass
+        return side, leverage
