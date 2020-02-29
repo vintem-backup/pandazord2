@@ -18,7 +18,7 @@ class AssetsHandler:
         'asset_symbol', self.asset_symbol.split(sep=','))
     
 
-    def update(self, field, update_to):
+    def update_position(self, field, update_to): #TODO: Atualizar este método
 
         update_status = self.PGBL.update_entry(table_name = self.exchange_name + '_assets', 
         pk_field = 'asset_symbol', 
