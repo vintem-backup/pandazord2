@@ -2,7 +2,6 @@
 
 from .common_libs import PriceSeriesFrom
 from .market_indicators import *
-from .klines_handler import OneMinuteCandlesAmount
 
 
 class CrossSMA:
@@ -16,6 +15,11 @@ class CrossSMA:
         self.price_source = operational_parameters['price_source']
 
         
+    def how_many_candles(self):
+        
+        return self.n_bigger
+
+
     def what_side_and_leverage(self, klines):
         
         side = 'short'; leverage = 1.0
@@ -27,15 +31,30 @@ class CrossSMA:
         else:
             
             price = getattr(PriceSeriesFrom(klines), self.price_source + '_')()
-            
             rolling_mean = Trend(price).simple_moving_average
-
             last_smaller = rolling_mean(self.n_smaller)[len(price) - 1]
-            
             last_bigger = rolling_mean(self.n_bigger)[len(price) - 1]
-
-            print ('Média longa = {}, média curta = {}'.format(last_bigger, last_smaller))
             
             if (last_smaller > last_bigger): side = 'long'
         
         return side, leverage
+
+    def verify(self, klines, position):
+        
+        side, leverage = self.what_side_and_leverage(klines)
+        
+        class Trade:
+            
+            def __init__(self, position, side, leverage):
+                
+                self.is_true = False
+                self.leverage = leverage
+                self.command = 'hold'
+                    
+                if(side == 'long' and position.iloc[0]['side'] == 'closed'): 
+                    self.command = 'buy'; self.is_true = True
+                
+                elif(side == 'short' and position.iloc[0]['side'] == 'long'): 
+                    self.command = 'sell'; self.is_true = True
+        
+        return Trade(position, side, leverage)
