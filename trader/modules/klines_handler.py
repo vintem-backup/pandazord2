@@ -82,7 +82,7 @@ class BinanceFromDb:
         
         if (candle_interval == '1m'):
 
-            klines = self.latest_one_minute(asset_symbol, number_of_candles)[:number_of_candles]
+            klines = self.latest_one_minute(asset_symbol, number_of_candles)
 
         else:
             
@@ -92,4 +92,4 @@ class BinanceFromDb:
             
             klines = Transform(klines_in).from_1m_to(candle_interval)
     
-        return klines
+        return klines[:number_of_candles]
