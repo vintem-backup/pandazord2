@@ -19,7 +19,7 @@ class OneMinuteCandlesAmount:
     
     def total(self, out_candle_number):
 
-        return out_candle_number*self.per_out_candle
+        return (out_candle_number + 1)*self.per_out_candle
 
 class Transform:
 
@@ -92,4 +92,4 @@ class BinanceFromDb:
             
             klines = Transform(klines_in).from_1m_to(candle_interval)
     
-        return klines
+        return klines[:number_of_candles]
