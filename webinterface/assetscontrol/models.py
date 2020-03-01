@@ -12,30 +12,60 @@ TRADE_CHOICES=(
     ('N', 'no'),
 )
 
+operational_parameters = {
+    'strategy' : {
+        'name' : 'CrossSMA',
+        
+        'parameters' : {
+            'price_source' : 'ohlc4',
+            'n_smaller' : 3,
+            'n_bigger' : 100
+        }
+    },
+    
+    'stop_loss' : {
+        'name' : 'Default',
+        
+        'parameters': {
+            'price_source' : 'ohlc4',
+            
+            'first_trigger' : {
+                'rate(%)' : 5,
+                
+                'treshold' : {
+                    'n_measurements' : 10,
+                    'n_positives' : 3
+                }
+                
+            },
+            
+            'second_trigger' : {
+                'rate(%)' : 1,
+                
+                'treshold' : {
+                    'n_measurements' : 50,
+                    'n_positives' : 20
+                }                
+            },
+            
+            'update_target_if' : {
+                'rate(%)' : 6,
+                
+                'treshold' : {
+                    'n_measurements' : 10,
+                    'n_positives' : 4                
+                }
+            }
+        }
+    },
+    
+    'candle_interval': '1h',
+    'sleep_duration': '1m',
+}
+
 def default_operational_parameters():
     
-    return {
-        'strategy' : {
-            'name' : 'CrossSMA',
-            'parameters' : {
-                'number_samples' : (3,100),
-            }
-        },
-        
-        'stop_loss' : {
-            'name' : 'Default',
-            'parameters': {
-                'first_trigger' : (1,3,10),
-                'second_trigger' : (1,16,50)
-            }
-                
-        },
-        
-        'candle_interval': '1h',
-        'sleep_duration': 60,
-        'price_source':'ohlc4'
-        
-    }
+    return operational_parameters
 
 def default_position():
     
