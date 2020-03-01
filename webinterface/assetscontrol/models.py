@@ -12,6 +12,7 @@ TRADE_CHOICES=(
     ('N', 'no'),
 )
 
+#TODO: Adicionar 'candle_interval' tanto na estratégia como no stop e retirar do corpo principal do dict.
 operational_parameters = {
     'strategy' : {
         'name' : 'CrossSMA',
