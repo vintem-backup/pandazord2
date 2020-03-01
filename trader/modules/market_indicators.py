@@ -1,15 +1,19 @@
 #TODO: Docstrings and Type annotations
 
+from .common_libs import PriceSeriesFrom
+
 class Trend:
 
-    def __init__(self, price_series_in):
+    def __init__(self, klines):
 
-        self.price_series_in = price_series_in
+        self.klines = klines
 
 
-    def simple_moving_average(self, number_of_samples):
+    def simple_moving_average(self, price_source, number_of_samples):
 
-        return self.price_series_in.rolling(number_of_samples).mean()
+        price = getattr(PriceSeriesFrom(self.klines), price_source + '_')()
+
+        return price.rolling(number_of_samples).mean()
 
 
 class Momentum:
