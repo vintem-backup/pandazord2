@@ -16,7 +16,7 @@
 
   * [ ] No nível de consultas ao banco de dados, tentar implementar o ***SQLAlchemy***, abaixo da abstração criada, como neste [exemplo](https://www.learndatasci.com/tutorials/using-databases-python-postgres-sqlalchemy-and-alembic/ "learndatasci, Data Science Tutorials")
   
-  * [ ] No nível de comunicação com a binance, tentar implemetar o [*wrapper* python](https://python-binance.readthedocs.io/en/latest/ "Python wrapper for binance API") largamente utilizado, abaixo da abstação criada.  
+  * [ ] No nível de comunicação com a binance, tentar implemetar o [*wrapper* python](https://python-binance.readthedocs.io/en/latest/ "Python wrapper for binance API") largamente utilizado, abaixo da abstração criada.  
 
 * [x] No programa ***"complete_oldest_data_so_far.py"***, deslocar a consulta do ***"last_open_time"*** ao banco de dados: de fora do ***whilie True*** para dentro, a fim de manter a regularidade da complementação do dado, mesmo em caso de falha do cluster.  
 **OBS.:** A função ***"replace_with_zero_where_data_is_missing"*** deixará de retornar o ***"last_open_time"***, já que não será mais necessário, tornando até mais correto o retorno.  
@@ -24,6 +24,8 @@
 ## Trader
 
 ### historical
+
+(É realmente necessário? E em que granulção de log?)
 
 * [ ] Dados de interesse: open_time, price, side (long, short, closed), order (hold, buy, sell)
 
