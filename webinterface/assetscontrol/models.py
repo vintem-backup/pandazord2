@@ -12,12 +12,12 @@ TRADE_CHOICES=(
     ('N', 'no'),
 )
 
-#TODO: Adicionar 'candle_interval' tanto na estratégia como no stop e retirar do corpo principal do dict.
 operational_parameters = {
     'strategy' : {
         'name' : 'CrossSMA',
         
         'parameters' : {
+            'candle_interval': '1h',
             'price_source' : 'ohlc4',
             'n_smaller' : 3,
             'n_bigger' : 100
@@ -28,6 +28,7 @@ operational_parameters = {
         'name' : 'Default',
         
         'parameters': {
+            'candle_interval': '1m',
             'price_source' : 'ohlc4',
             
             'first_trigger' : {
@@ -60,8 +61,7 @@ operational_parameters = {
         }
     },
     
-    'candle_interval': '1h',
-    'sleep_duration': '1m',
+    'sleep_duration': 60,
 }
 
 def default_operational_parameters():
