@@ -32,7 +32,12 @@
 ### klines_handler
 
 * [x] Adicionar método para pegar toda a massa de dados de 1m disponível para aquele par, para backingtest  
+* [ ] "Descer" as credenciais do banco 'os.environmet...' para este módulo, ao invés do 'trader'
 * [ ] Adicionar método para pegar as *klines* **a partir de** e **até** um *datetime* específicos  
 * [ ] Adicionar método para apenas "atualizar" a *kline*, "memorizando" a massa de dados mais extensa,substituindo a entrada mais antiga e adicionando uma entrada mais recente (*"cache"*).  
 * [ ] Adicionar funcionalidade *"no offset"* a fim de retornar **apenas** [candles que "façam sentido"](/docs/questions.md)
 * [ ] Escrever os testes  
+
+### Assets_handler
+
+* [ ] "Descer" as credenciais do banco 'os.environmet...' para este módulo, ao invés do 'trader'
