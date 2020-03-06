@@ -47,10 +47,10 @@ class CrossSMA:
                 self.leverage = leverage
                 self.command = 'hold'
                     
-                if(side == 'long' and position.iloc[0]['side'] == 'closed'): 
+                if(side == 'long' and position['side'] == 'closed'): 
                     self.command = 'buy'; self.is_true = True
                 
-                elif(side == 'short' and position.iloc[0]['side'] == 'long'): 
+                elif(side == 'short' and position['side'] == 'long'): 
                     self.command = 'sell'; self.is_true = True
         
         return Trade(position, side, leverage)
