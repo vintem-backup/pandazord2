@@ -12,13 +12,16 @@ class AssetsHandler:
         self.asset_symbol = asset_symbol
     
 
+    #TODO: O pandas dataframe tem um método com este nome, então refatorar.
     def info(self):
 
         return self.PGDF.read_entries_list((self.exchange_name + '_assets'), 
         'asset_symbol', self.asset_symbol.split(sep=','))
     
-
-    def update_position(self, field, update_to): #TODO: Atualizar este método
+    #TODO: Atualizar este método
+    #Por se tratar de um objeto json, possivelmente terá dde ser todo carregado e atualizado 
+    #apenas o valor da chave desejada. Como fazer isto de modo "DRY", para qualquer chave dada?
+    def update_position(self, field, update_to):
 
         update_status = self.PGBL.update_entry(table_name = self.exchange_name + '_assets', 
         pk_field = 'asset_symbol', 
