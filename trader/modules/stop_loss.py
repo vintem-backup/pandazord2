@@ -109,8 +109,8 @@ class Default:
                     self.is_true = self.short_stop(klines, self.target_price)
                     self.update_target, self.new_target_price = self.short_new_price(klines, self.target_price)
                 
-                elif(position['side'] == 'clsed'):
-                    print('Nothing to do.')
+                elif(position['side'] == 'closed'):
+                    print('Closed, nothing to do.')
 
                 else:
                     print('Not a valid position.')              
