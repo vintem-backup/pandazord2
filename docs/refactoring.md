@@ -1,5 +1,9 @@
 # Plano de Refatoração
 
+## De uma modo geral
+
+* [ ] Revisar os programas, vasculhando atributos/métodos privados e violações deste modelo, como no livro da alura, capitúlo 8
+
 ## webinterface
 
 * [x] Retirar: "real_current_side", "real_target_price", "bt_current_side", "bt_target_price"  
@@ -41,3 +45,7 @@
 ### Assets_handler
 
 * [ ] "Descer" as credenciais do banco 'os.environmet...' para este módulo, ao invés do 'trader'
+
+### Strategies
+
+* [ ] É possível criar uma cadeia de classes para formar o objeto "operational_parametres". Ver o livro da alura entre as pgs 100 e 102
