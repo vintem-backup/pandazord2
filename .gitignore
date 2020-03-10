@@ -11,6 +11,7 @@ djangolog
 *.ipynb
 dev/*
 **/DEV*
+**/DEPRECATED*
 
 #Coisas provisórias
 trader/postgres_handler.py
