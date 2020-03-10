@@ -1,5 +1,9 @@
 # Plano de Refatoração
 
+## De uma modo geral
+
+* [ ] Revisar os programas, vasculhando atributos/métodos privados e violações deste modelo, como no livro da alura, capitúlo 8
+
 ## webinterface
 
 * [x] Retirar: "real_current_side", "real_target_price", "bt_current_side", "bt_target_price"  
@@ -32,7 +36,16 @@
 ### klines_handler
 
 * [x] Adicionar método para pegar toda a massa de dados de 1m disponível para aquele par, para backingtest  
+* [ ] "Descer" as credenciais do banco 'os.environmet...' para este módulo, ao invés do 'trader'
 * [ ] Adicionar método para pegar as *klines* **a partir de** e **até** um *datetime* específicos  
 * [ ] Adicionar método para apenas "atualizar" a *kline*, "memorizando" a massa de dados mais extensa,substituindo a entrada mais antiga e adicionando uma entrada mais recente (*"cache"*).  
 * [ ] Adicionar funcionalidade *"no offset"* a fim de retornar **apenas** [candles que "façam sentido"](/docs/questions.md)
 * [ ] Escrever os testes  
+
+### Assets_handler
+
+* [ ] "Descer" as credenciais do banco 'os.environmet...' para este módulo, ao invés do 'trader'
+
+### Strategies
+
+* [ ] É possível criar uma cadeia de classes para formar o objeto "operational_parametres". Ver o livro da alura entre as pgs 100 e 102
