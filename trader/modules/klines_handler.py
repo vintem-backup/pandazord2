@@ -1,9 +1,22 @@
+#TODO: Docstrings and Type annotations
+
 from pgmask.dataframelayer import DataframeLayer as PG_DF
 #from pgmask.basiclayer import BasicLayer as PG_BL
 import pandas as pd
 
-#TODO: Docstrings and Type annotations
+#Production
+#POSTGRES_USER = os.environ['POSTGRES_USER']
+#POSTGRES_PASSWORD = os.environ['POSTGRES_PASSWORD']
+#DB_HOST = os.environ['DB_HOST']
+#PG_PORT = os.environ['PG_PORT']
+#POSTGRES_DB = os.environ['POSTGRES_DB']
 
+#Dev-new    
+POSTGRES_USER = 'pandazord'
+POSTGRES_PASSWORD = 'QBBV9E%pcYKHUcjj'
+DB_HOST = 'localhost'
+PG_PORT = 5432
+POSTGRES_DB = 'pandazord_database'
 
 class OneMinuteCandlesAmount:
 
@@ -56,11 +69,11 @@ class Transform:
                                   kind='quicksort', na_position='last', ignore_index=True) 
 
     
-class BinanceFromDb:
+class BinanceFromDb(object):
     
-    def __init__(self, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME):
+    def __init__(self):
         
-        self.PGDF = PG_DF(DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
+        self.PGDF = PG_DF(POSTGRES_USER, POSTGRES_PASSWORD, DB_HOST, PG_PORT, POSTGRES_DB)
     
     
     def latest_one_minute(self, asset_symbol, number_of_one_minute_entries):
