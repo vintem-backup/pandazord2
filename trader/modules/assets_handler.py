@@ -103,6 +103,9 @@ class Position:
         else:
             print("Invalid. Must be a numerical ('float' or 'int') type." ) #TODO: Tratar exceção sem print
 
+    def show(self):
+        return {'side' : self._side, 'size' : self._size, 'target_price' : self._target_price}
+
 class BackingTestAssetPosition(Position):
     pass
 
