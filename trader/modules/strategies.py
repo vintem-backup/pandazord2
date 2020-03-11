@@ -28,8 +28,8 @@ class CrossSMA:
         else:
 
             rolling_mean = Trend(klines).simple_moving_average
-            last_smaller = rolling_mean(self.price_source, self.n_smaller)[len(klines) - 1]
-            last_bigger = rolling_mean(self.price_source, self.n_bigger)[len(klines) - 1]
+            last_smaller = rolling_mean(self.price_source, self.n_smaller)[-1]
+            last_bigger = rolling_mean(self.price_source, self.n_bigger)[-1]
             
             if (last_smaller > last_bigger): side = 'long'
         
