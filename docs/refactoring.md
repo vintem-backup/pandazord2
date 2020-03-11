@@ -4,6 +4,8 @@
 
 * [ ] Revisar os programas, vasculhando atributos/métodos privados e violações deste modelo, como no livro da alura, capitúlo 8
 
+* [ ] Adicionar decorador de cálculo do tempo de processamento (há alguns modelos no PyPi).
+
 ## webinterface
 
 * [x] Retirar: "real_current_side", "real_target_price", "bt_current_side", "bt_target_price"  
@@ -27,25 +29,33 @@
 
 ## Trader
 
-### historical
+### main
+
+#### Backing Test
+
+* [ ] Calcular o tempo de duração do processo através do decorador específico.
+
+### modules
+
+#### historical
 
 (É realmente necessário? E em que granulção de log?)
 
 * [ ] Dados de interesse: open_time, price, side (long, short, closed), order (hold, buy, sell)
 
-### klines_handler
+#### klines_handler
 
 * [x] Adicionar método para pegar toda a massa de dados de 1m disponível para aquele par, para backingtest  
-* [ ] "Descer" as credenciais do banco 'os.environmet...' para este módulo, ao invés do 'trader'
+* [x] "Descer" as credenciais do banco 'os.environmet...' para este módulo, ao invés do 'trader'
 * [ ] Adicionar método para pegar as *klines* **a partir de** e **até** um *datetime* específicos  
 * [ ] Adicionar método para apenas "atualizar" a *kline*, "memorizando" a massa de dados mais extensa,substituindo a entrada mais antiga e adicionando uma entrada mais recente (*"cache"*).  
 * [ ] Adicionar funcionalidade *"no offset"* a fim de retornar **apenas** [candles que "façam sentido"](/docs/questions.md)
 * [ ] Escrever os testes  
 
-### Assets_handler
+#### Assets_handler
 
-* [ ] "Descer" as credenciais do banco 'os.environmet...' para este módulo, ao invés do 'trader'
+* [x] "Descer" as credenciais do banco 'os.environmet...' para este módulo, ao invés do 'trader'
 
-### Strategies
+#### Strategies
 
 * [ ] É possível criar uma cadeia de classes para formar o objeto "operational_parametres". Ver o livro da alura entre as pgs 100 e 102
