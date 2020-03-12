@@ -1,7 +1,6 @@
 #TODO: Docstrings and Type annotations
 
-from pgmask.dataframelayer import DataframeLayer as PG_DF
-#from pgmask.basiclayer import BasicLayer as PG_BL
+from pgmask.dataframelayer import DataframeLayer
 import pandas as pd
 
 #Production
@@ -77,9 +76,8 @@ class Transform:
 class BinanceFromDb(object):
     
     def __init__(self):
-        
-        self.PGDF = PG_DF(POSTGRES_USER, POSTGRES_PASSWORD, DB_HOST, PG_PORT, POSTGRES_DB)
-    
+
+        self.PGDF = DataframeLayer(POSTGRES_USER, POSTGRES_PASSWORD, DB_HOST, PG_PORT, POSTGRES_DB)
     
     def latest_one_minute(self, asset_symbol, number_of_one_minute_entries):
         
