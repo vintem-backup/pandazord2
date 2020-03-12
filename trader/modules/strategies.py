@@ -52,5 +52,12 @@ class CrossSMA:
                 
                 elif(side == 'short' and position['side'] == 'long'): 
                     self.command = 'sell'; self.is_true = True
+                
+                self.order = {
+                    'command' : command
+                    'size' : position['size']
+                    'leverage' : leverage
+                    'price' : 'market'
+                }
         
         return Trade(position, side, leverage)
