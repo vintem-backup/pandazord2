@@ -38,7 +38,6 @@ class AssetsHandler:
         
         self.op_param = self.get_dataframe().iloc[0].operational_parameters
         return self.op_param
-    
 
 class Position:
 
@@ -105,22 +104,18 @@ class Position:
 
     def show(self):
         return {'side' : self._side, 'size' : self._size, 'target_price' : self._target_price}
+    
+    def update_position(self, new_position):
+        self._side = new_position['side']
+        self._size = new_position['size']
+        self._target_price = new_position['target_price']
 
-class BackingTestAssetPosition(Position):
+class BackingTestPosition(Position):
     pass
 
 class RealTradePosition(Position):
-    pass
 
-    #TODO: Atualizar este método
-    #Por se tratar de um objeto json, possivelmente terá dde ser todo carregado e atualizado 
-    #apenas o valor da chave desejada. Como fazer isto de modo "DRY", para qualquer chave dada?
-    def update_position(self, field, update_to):
-
-        update_status = self.PGBL.update_entry(table_name = self.exchange_name + '_assets', 
-        pk_field = 'asset_symbol', 
-        pk_value = self.asset_symbol, 
-        field_to_update = field, 
-        new_field_value = update_to)
-
-        return update_status
+    def update_position(self, new_position):
+        
+        super(RealTradePosition, self).update_position(new_position)
+        # Save into DB method here...
