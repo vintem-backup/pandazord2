@@ -28,6 +28,7 @@ class CrossSMA:
         else:
 
             rolling_mean = Trend(klines).simple_moving_average
+            #TODO: Resolver o problema deste [-1]
             last_smaller = rolling_mean(self.price_source, self.n_smaller)[-1]
             last_bigger = rolling_mean(self.price_source, self.n_bigger)[-1]
             
@@ -54,10 +55,11 @@ class CrossSMA:
                     self.command = 'sell'; self.is_true = True
                 
                 self.order = {
-                    'command' : command
-                    'size' : position['size']
-                    'leverage' : leverage
-                    'price' : 'market'
+                    'type' : 'strategy trade',
+                    'command' : command,
+                    'size' : position['size'],
+                    'leverage' : leverage,
+                    'price' : 'market',
                 }
         
         return Trade(position, side, leverage)
