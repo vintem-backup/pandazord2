@@ -105,7 +105,7 @@ class Position:
     def show(self):
         return {'side' : self._side, 'size' : self._size, 'target_price' : self._target_price}
     
-    def update_position(self, new_position):
+    def update_with(self, new_position):
         self._side = new_position['side']
         self._size = new_position['size']
         self._target_price = new_position['target_price']
@@ -115,7 +115,7 @@ class BackingTestPosition(Position):
 
 class RealTradePosition(Position):
 
-    def update_position(self, new_position):
+    def update_with(self, new_position):
         
-        super(RealTradePosition, self).update_position(new_position)
+        super(RealTradePosition, self).update_with(new_position)
         # Save into DB method here...
