@@ -91,9 +91,10 @@ class Default:
                 self.is_true = is_true
                 self.update_target, self.new_target_price = update_target, new_target_price
                 self.order = {
-                    'command' : command
-                    'size' : position['size']
-                    'leverage' : 1
+                    'type' : 'stop loss',
+                    'command' : command,
+                    'size' : position['size'],
+                    'leverage' : 1,
                     'price' : 'market'
                 }
         
