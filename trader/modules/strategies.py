@@ -28,8 +28,9 @@ class CrossSMA:
         else:
 
             rolling_mean = Trend(klines).simple_moving_average
-            last_smaller = rolling_mean(self.price_source, self.n_smaller)[len(klines) - 1]
-            last_bigger = rolling_mean(self.price_source, self.n_bigger)[len(klines) - 1]
+            #TODO: Resolver o problema deste [-1]
+            last_smaller = rolling_mean(self.price_source, self.n_smaller)[-1]
+            last_bigger = rolling_mean(self.price_source, self.n_bigger)[-1]
             
             if (last_smaller > last_bigger): side = 'long'
         
@@ -52,5 +53,13 @@ class CrossSMA:
                 
                 elif(side == 'short' and position['side'] == 'long'): 
                     self.command = 'sell'; self.is_true = True
+                
+                self.order = {
+                    'type' : 'strategy trade',
+                    'command' : command,
+                    'size' : position['size'],
+                    'leverage' : leverage,
+                    'price' : 'market',
+                }
         
         return Trade(position, side, leverage)

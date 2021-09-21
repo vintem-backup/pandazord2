@@ -25,7 +25,6 @@ class Default:
     def how_many_candles(self): #ok
         
         return max(self.first.n_measurements, self.second.n_measurements, self.update.n_measurements)
-    
 
     def bottom_trigger(klines, target_price, trigger): #ok
 
@@ -40,7 +39,6 @@ class Default:
         
         return positive
 
-
     def upper_trigger(klines, target_price, trigger): #ok
 
         positive = False; positive_found = 0
@@ -54,18 +52,15 @@ class Default:
         
         return positive
 
-
     def long_stop(self, klines, target_price): #seems_ok
 
         return True in [self.bottom_trigger(klines, target_price, self.first), 
         self.bottom_trigger(klines, target_price, self.second)]
 
-
     def short_stop(self, klines, target_price): #seems_ok
 
         return True in [self.upper_trigger(klines, target_price, self.first), 
         self.upper_trigger(klines, target_price, self.second)]
-    
 
     def long_new_price(self, klines, target_price): #seems_ok
 
@@ -77,7 +72,6 @@ class Default:
 
         return hit_new_price, new_price
 
-
     def short_new_price(self, klines, target_price): #seems_ok
 
         hit_new_price, new_price = False, target_price
@@ -88,31 +82,39 @@ class Default:
 
         return hit_new_price, new_price
     
-    
     def verify(self, klines, position): #seems_ok
 
         class Stop: #seems_ok
             
-            def __init__(self, klines, position): #seems_ok
+            def __init__(self, is_true, position, update_target, new_target_price, command): #seems_ok
 
-                self.target_price = position['target_price']
-                self.is_true = False
-                self.update_target, self.new_target_price = False, self.target_price
+                self.is_true = is_true
+                self.update_target, self.new_target_price = update_target, new_target_price
+                self.order = {
+                    'type' : 'stop loss',
+                    'command' : command,
+                    'size' : position['size'],
+                    'leverage' : 1,
+                    'price' : 'market'
+                }
+        
+        #Default values
+        is_true, update_target, new_target_price, command = False, False, position['target_price'], 'hold'
 
-                if(position['side'] == 'long'):
+        if(position['side'] == 'long'):
+            is_true = self.long_stop(klines, position['target_price'])
+            if(is_true): command = 'sell'
+            update_target, new_target_price = self.long_new_price(klines, position['target_price'])
+        
+        elif(position['side'] == 'short'):
+            is_true = self.short_stop(klines, position['target_price'])
+            if(is_true): command = 'buy'
+            update_target, new_target_price = self.short_new_price(klines, position['target_price'])
+        
+        elif(position['side'] == 'closed'):
+            print('Closed, nothing to do.')
 
-                    self.is_true = self.long_stop(klines, self.target_price)
-                    self.update_target, self.new_target_price = self.long_new_price(klines, self.target_price)
-                
-                elif(position['side'] == 'short'):
-
-                    self.is_true = self.short_stop(klines, self.target_price)
-                    self.update_target, self.new_target_price = self.short_new_price(klines, self.target_price)
-                
-                elif(position['side'] == 'closed'):
-                    print('Closed, nothing to do.')
-
-                else:
-                    print('Not a valid position.')              
-    
-        return Stop(klines, position)
+        else:
+            print('Not a valid position.')
+        
+        return Stop(is_true, position, update_target, new_target_price, command)

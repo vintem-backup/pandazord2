@@ -1,7 +1,6 @@
 #TODO: Docstrings and Type annotations
 
-from pgmask.dataframelayer import DataframeLayer as PG_DF
-#from pgmask.basiclayer import BasicLayer as PG_BL
+from pgmask.dataframelayer import DataframeLayer
 import pandas as pd
 
 #Production
@@ -38,43 +37,47 @@ class Transform:
 
     def __init__(self, klines_in):
 
-        #TODO: Adicionar teste para verificação se a kline é de 1m
-
         self.klines_in = klines_in
 
-        
+    #TODO: Adicionar teste para verificação se a kline é de 1m    
     def from_1m_to(self, out_candle_interval):
         
-        klines = pd.DataFrame(columns = ['open_time', 'open', 'high', 'low', 'close', 'volume'])
+        if (out_candle_interval == '1m'):
 
-        slice_size = OneMinuteCandlesAmount(out_candle_interval).per_out_candle
+            klines = self.klines_in
+            return klines
+        
+        else:
+        
+            klines = pd.DataFrame(columns = ['open_time', 'open', 'high', 'low', 'close', 'volume'])
 
-        end_index = len(self.klines_in); start_index = end_index - slice_size; i = 0
+            slice_size = OneMinuteCandlesAmount(out_candle_interval).per_out_candle
 
-        while end_index > slice_size:
+            end_index = len(self.klines_in); start_index = end_index - slice_size; i = 0
 
-            work_klines = pd.DataFrame()
-            work_klines = work_klines.append(self.klines_in.iloc[start_index:end_index], ignore_index=True)
+            while end_index > slice_size:
 
-            klines.loc[i, 'open_time'] = work_klines.loc[0, 'open_time']
-            klines.loc[i, 'open'] = work_klines.loc[0, 'open']
-            klines.loc[i, 'high'] = work_klines['high'].max()
-            klines.loc[i, 'low'] = work_klines['low'].min()
-            klines.loc[i, 'close'] = work_klines.loc[slice_size - 1, 'close']
-            klines.loc[i, 'volume'] = work_klines['volume'].sum()
+                work_klines = pd.DataFrame()
+                work_klines = work_klines.append(self.klines_in.iloc[start_index:end_index], ignore_index=True)
 
-            i+=1; start_index-=slice_size; end_index-=slice_size
+                klines.loc[i, 'open_time'] = work_klines.loc[0, 'open_time']
+                klines.loc[i, 'open'] = work_klines.loc[0, 'open']
+                klines.loc[i, 'high'] = work_klines['high'].max()
+                klines.loc[i, 'low'] = work_klines['low'].min()
+                klines.loc[i, 'close'] = work_klines.loc[slice_size - 1, 'close']
+                klines.loc[i, 'volume'] = work_klines['volume'].sum()
 
-        return klines.sort_values(by = ['open_time'], axis=0, ascending=True, inplace=False, 
+                i+=1; start_index-=slice_size; end_index-=slice_size
+
+            return klines.sort_values(by = ['open_time'], axis=0, ascending=True, inplace=False, 
                                   kind='quicksort', na_position='last', ignore_index=True) 
 
     
 class BinanceFromDb(object):
     
     def __init__(self):
-        
-        self.PGDF = PG_DF(POSTGRES_USER, POSTGRES_PASSWORD, DB_HOST, PG_PORT, POSTGRES_DB)
-    
+
+        self.PGDF = DataframeLayer(POSTGRES_USER, POSTGRES_PASSWORD, DB_HOST, PG_PORT, POSTGRES_DB)
     
     def latest_one_minute(self, asset_symbol, number_of_one_minute_entries):
         
@@ -92,17 +95,11 @@ class BinanceFromDb(object):
     
     
     def get_latest(self, asset_symbol, candle_interval, number_of_candles):
+            
+        number_of_entries = OneMinuteCandlesAmount(candle_interval).total(number_of_candles)
         
-        if (candle_interval == '1m'):
+        klines_in = self.latest_one_minute(asset_symbol, number_of_entries)
+        
+        klines = Transform(klines_in).from_1m_to(candle_interval)
 
-            klines = self.latest_one_minute(asset_symbol, number_of_candles)
-
-        else:
-            
-            number_of_entries = OneMinuteCandlesAmount(candle_interval).total(number_of_candles)
-            
-            klines_in = self.latest_one_minute(asset_symbol, number_of_entries)
-            
-            klines = Transform(klines_in).from_1m_to(candle_interval)
-    
         return klines[:number_of_candles]
